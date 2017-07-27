@@ -1,0 +1,71 @@
+<div ng-cloak>
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <div flex style="text-align : center">{{ctrl.detail.Status.Name}}</div>
+     <md-icon style="cursor:pointer" ng-click="ctrl.mdPanelRef.close()" aria-label="Close"> highlight_off </md-icon>
+  </div>
+</md-toolbar>
+<md-content ng-style = "ctrl.obj">
+    <md-tabs md-dynamic-height md-border-bottom>
+      <md-tab label="About">
+        <md-content class="md-padding">
+
+          <md-content ng-style="ctrl.obj" layout-padding layout="column">
+             <div layout="column">
+             <div style="height : 250px;background : url(http://cdn.mos.cms.futurecdn.net/88dd988d7d202c48b5e1170e60c1e0a          c.jpg);" layout="column" layout-align="center center">
+                  <img ng-src="{{ctrl.detail.Status.Pic}}"  style="height:100px;width:100px;border-radius:50%"></img>
+             </div>
+              <div layout layout-align="center">
+                 <span class="md-title" >{{ctrl.detail.Status.Status}}</span>
+              </div>
+           </div>
+         </md-content>
+        </md-content>
+      </md-tab>
+      <md-tab label="Followers">
+        <div style="padding-right: 10px; padding-left: 10px;">
+         <md-list class="md-dense">
+
+            <md-list-item ng-repeat = "item in ctrl.people.Status.ConnectionData.Followers track by $index" class="md-2-line" ng-click = "ctrl.openprofile(item.UserID)">
+
+      <img ng-src="{{item.Pic}}" class="md-avatar">
+      <div>
+        <div style="font-size : 18px; margin-top: 18px">{{item.FullName}}</div>
+      </div>
+      <span flex></span>
+      <!--  <md-button class="md-icon-button" aria-label="add" ng-click ="ctrl.addtocommunity(item.UserID)" ng-hide ="ctrl.suarez">
+         <md-icon md-font-set="material-icons">add_circle</md-icon>
+        </md-button> -->
+      <md-button  ng-hide ="!ctrl.neymar " class="md-icon-button" aria-label="remove" ng-click = "ctrl.remove1(item.UserID, $index)">
+         <md-icon md-font-set="material-icons">cancel</md-icon>
+        </md-button>
+        <md-divider></md-divider>
+    </md-list-item>
+  </md-list>
+       </div>
+      </md-tab>
+      <md-tab label="Connections">
+        <div style="padding-right: 10px; padding-left: 10px;">
+         <md-list class="md-dense">
+
+            <md-list-item ng-repeat = "item in ctrl.people.Status.ConnectionData.Connection track by $index"  class="md-2-line" ng-click = "ctrl.openprofile(item.UserID)">
+
+              <img ng-src="{{item.Pic}}" class="md-avatar">
+                <div>
+        <div style="font-size : 18px; margin-top: 18px">{{item.FullName}}</div>
+      </div>
+      <span flex></span>
+  <!--      <md-button ng-hide = "ctrl.neymar" class="md-icon-button" aria-label="add" ng-click ="ctrl.addtocommunity(item.UserID)">
+         <md-icon md-font-set="material-icons">add_circle</md-icon>
+        </md-button> -->
+      <md-button ng-hide ="!ctrl.neymar"  class="md-icon-button" aria-label="remove" ng-click = "ctrl.remove2(item.UserID,$index)">
+         <md-icon md-font-set="material-icons">cancel</md-icon>
+        </md-button>
+      <md-divider></md-divider>
+    </md-list-item>
+  </md-list>
+        </div>
+      </md-tab>
+    </md-tabs>
+  </md-content>
+  </div>

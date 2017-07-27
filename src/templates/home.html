@@ -1,0 +1,75 @@
+<md-content layout-margin layout-fill layout>
+   <div hide-xs flex layout="column" layout-margin>
+      <md-card flex class="md-whiteframe-5dp" layout-margin md-theme="cardTheme" >
+         <md-toolbar>
+            <div class="md-toolbar-tools">
+                <div layout="row">
+                    <h1 class="md-title" style="color:white">Diagnosis of your patient</h1>
+                </div>
+            </div>
+        </md-toolbar>
+        <md-content layout-padding>
+            <form name="patientForm" ng-submit="proceed()">
+               <md-input-container class="md-icon-float md-block">
+                  <label>Patient Name</label>
+                  <md-icon class="material-icons">account_circle</md-icon>
+                  <input required ng-model="u.name" type="text">
+               </md-input-container>
+               <md-input-container class="md-icon-float md-block">
+                  <label>Phone Number</label>
+                  <md-icon class="material-icons">phone</md-icon>
+                  <input  required limit-to = "10" name="phone" ng-model="u.phone" type="number" min = "1000000000" max = "9999999999">
+                  <div ng-messages="patientForm.phone.$error">
+                       <div ng-message="min,max">Please Enter 10 Digit Phone Number</div>
+                  </div>
+               </md-input-container>
+               <md-input-container class="md-block">
+                 <label>Date of Birth</label>
+                 <input id = "datefield" type="date" ng-model="u.dob" required></input>
+               </md-input-container>
+               <md-input-container>
+                  <md-radio-group layout-gt-sm="row" name="gender" id="gender" ng-model="u.gender" ng-required="true" class="md-primary">
+                     <md-radio-button flex="50" name="gender" value="Male"   required> Male</md-radio-button>
+                     <br>
+                     <md-radio-button flex="50" name="gender" value="Female" required> Female</md-radio-button>
+                  </md-radio-group>
+                  <div ng-messages="patientForm.gender.$error">
+                     <div ng-message="required">This is required</div>
+                  </div>
+               </md-input-container>
+               <div layout="column" layout-align="center center">
+                  <md-button ga-on="click" ga-event-category="DxMate" ga-event-action="proceedWithPatientForm" type="submit"  class="md-raised md-primary" ng-disabled="patientForm.$invalid" aria-label="proceed patient form">Proceed</md-button>
+               </div>
+            </form>
+          </md-content>
+      </md-card>
+   </div>
+   <div flex-gt-xs = "33" flex-xs layout="column" layout-margin>
+    <md-card flex-gt-xs class="md-whiteframe-5dp" md-theme="cardTheme" layout-margin>
+      <md-toolbar>
+         <div class="md-toolbar-tools">
+             <div layout="row">
+                 <h1 class="md-title" style="color:white">New Cases</h1>
+             </div>
+             <span flex></span>
+             <md-button class="md-icon-button" aria-label="Refresh Cases" ng-click="refreshcases()">
+               <md-icon md-font-set="material-icons">refresh</md-icon>
+             </md-button>
+         </div>
+     </md-toolbar>
+      <md-content>
+        <rd-loading loading="!recentSym.$resolved">
+            <md-list layout-fill>
+                <md-list-item ng-disabled = "itemclicked" class="md-1-line" ng-repeat="item in recentSym.Status.SharedSymptoms" ng-click="newcase(item.PID, item.AID)">
+                  <img ng-src="{{item.Pic}}" class="md-avatar" alt="{{item.who}}" />
+                  <div class="md-list-item-text" layout="column">
+                    <h3>{{ item.FName }} {{item.LName}}</h3>
+                  </div>
+                  <md-divider></md-divider>
+                </md-list-item>
+            </md-list>
+        </rd-loading>
+      </md-content>
+    </md-card>
+   </div>
+</md-content>

@@ -1,0 +1,27 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <div flex style="text-align : center">Share Article</div>
+     <md-icon style="cursor:pointer" ng-click="ctrl.mdPanelRef.close()" aria-label="Close"> highlight_off </md-icon>
+  </div>
+</md-toolbar>
+<md-content ng-style="ctrl.obj" layout-padding layout="column">
+  <form name="ShareForm">
+    <md-input-container class="md-block">
+      <label>Communities</label>
+      <md-select ng-model="ctrl.selected" name="community" required>
+        <md-option ng-repeat="commu in ctrl.communities" ng-value="commu.CommuID">
+          {{commu.Name}}
+        </md-option>
+      </md-select>
+      <div ng-messages="ShareForm.community.$error">
+        <div ng-message="required">This is Required</div>
+      </div>
+    </md-input-container>
+    <md-input-container class="md-block">
+      <label>Place your thoughts</label>
+      <input  type="text" ng-model="ctrl.summary" name="thoughts"></input>
+    </md-input-container>
+    <md-divider></md-divider>
+    <md-button ga-on="click" ga-event-category="Community" ga-event-action="share" class="md-raised md-primary" ng-click="ctrl.share()" aria-label="Share Button" ng-disabled="!ShareForm.$valid">Share</md-button>
+  </form>
+</md-content>

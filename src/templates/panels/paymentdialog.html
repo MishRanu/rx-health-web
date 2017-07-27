@@ -1,0 +1,28 @@
+<md-dialog aria-label="Fees Dialog">
+  <form ng-cloak ng-submit = "ctrl.confirm()">
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+        <h2>Payment</h2>
+      </div>
+    </md-toolbar>
+    <md-dialog-content>
+      <div class="md-dialog-content">
+        <md-input-container class="md-block">
+          <label>Condition</label>
+          <md-select ng-model="ctrl.selectedCondition" required>
+            <md-option ng-repeat="condition in ctrl.conditions" ng-value="condition.ConditionID">
+              {{condition.ConditionName}}
+            </md-option>
+          </md-select>
+        </md-input-container>
+        <md-input-container class="md-block">
+          <label>Fees Taken</label>
+          <input type="number" name="Fees" min="0" ng-model="ctrl.payment" ng-disabled="ctrl.paymentdone" required>
+        </md-input-container>
+      </div>
+    </md-dialog-content>
+    <md-dialog-actions layout="row">
+      <md-button type="submit">Ok</md-button>
+    </md-dialog-actions>
+  </form>
+</md-dialog>

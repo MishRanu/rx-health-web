@@ -1,0 +1,121 @@
+<style>
+.md-datepicker-calendar-pane{
+z-index: 1200}
+</style>
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <div flex style="text-align : center">Profile</div>
+     <md-icon style="cursor:pointer" ng-click="ctrl.mdPanelRef.close()" aria-label="Close"> highlight_off </md-icon>
+  </div>
+</md-toolbar>
+<md-content ng-style="ctrl.obj">
+  <md-card layout-align="center" layout="column">
+    <div layout layout-align="center">
+      <img class="avatar" src={{ctrl.profile.Status.DoctorData.Pic}}></img>
+    </div>
+    <div layout layout-align="center">
+      <md-button  style="overflow:hidden" ng-show="!ctrl.volatile">
+        <input class="upload-overlay" aria-label="edit" type="file" accept="image/*" ng-files = "ctrl.picchangecallback($files)">Edit Pic</input>
+      </md-button>
+      <md-button  ng-show="ctrl.volatile" aria-label="Confirm-edit-pic" ng-click = "ctrl.submit(-1)">Confirm</md-button>
+    </div>
+    <md-card-content layout-align="center" layout>
+      <div>{{ctrl.profile.Status.DoctorData.Name}}</div>
+    </md-card-content>
+  </md-card>
+  <md-card ng-repeat="x in ctrl.contactdetails track by $index">
+    <md-card-title>
+      <md-card-title-text>
+        <span class="md-headline">{{x.head}}</span>
+      </md-card-title-text>
+    </md-card-title>
+    <md-card-content layout>
+      <md-list class="md-dense" ng-show="!x.edit">
+        <md-list-item ng-repeat="y in x.contents" layout layout-align="center start">
+          <div>{{y}} : {{ctrl.profile.Status.DoctorData[y]}}</div>
+        </md-list-item>
+        <md-list-item ng-repeat="z in x.contents1" layout layout-align="center start">
+          <div  style="margin-top : 20px" flex = "initial" layout-align="start start">{{z}} : </div>
+          <md-list flex class="md-dense">
+            <md-list-item ng-repeat="w in ctrl.profile.Status.DoctorData[z]">{{w.name}}</md-list-item>
+          </md-list>
+          <md-divider></md-divider>
+        </md-list-item>
+      </md-list>
+      <form name= "editForm1" ng-show="$index == 0 && ctrl.contactdetails[0].edit">
+        <md-input-container class="md-block">
+          <label>First Name</label>
+          <input type="text" required md-no-asterisk name="fname" ng-model="ctrl.info['First Name']">
+          <div ng-messages="editForm1.fname.$error">
+            <div ng-message="required">Please Enter your First Name</div>
+          </div>
+        </md-input-container>
+        <md-input-container class="md-block">
+          <label>Last Name</label>
+          <input type="text" required md-no-asterisk name="lname" ng-model="ctrl.info['Last Name']">
+          <div ng-messages="editForm1.lname.$error">
+            <div ng-message="required">Please Enter your Last Name</div>
+          </div>
+        </md-input-container>
+        <md-input-container class="md-block">
+          <label>Secondary Phone</label>
+          <input type="number" md-no-asterisk min="1000000" max="9999999999999" name="secphone" ng-model="ctrl.info['Secondary Phone']">
+          <div ng-messages="editForm1.secphone.$error">
+            <div ng-message="min,max">Please Enter 10 Digit Phone Number</div>
+          </div>
+        </md-input-container>
+        <div layout>
+          <md-button  type="submit" ng-click="ctrl.submit($index)">Submit</md-button>
+          <md-button  ng-click="ctrl.cancel($index)">Cancel</md-button>
+        </div>
+      </form>
+      <form name= "editForm2" ng-show="$index == 1 && ctrl.contactdetails[1].edit">
+        <md-input-container class="md-block">
+          <label>Date of Birth</label>
+          <input id="datefield" type="date" ng-model="ctrl.info['Date of Birth']" required>
+        </md-input-container>
+        <md-input-container class="md-block">
+          <label>Sex</label>
+          <md-switch ng-model="ctrl.info['Sex']" aria-label="Switch" ng-true-value="'male'" ng-false-value="'female'" class="md-primary">
+            {{ ctrl.info['Sex'] }}
+          </md-switch>
+        </md-input-container>
+        <div layout>
+          <md-button  type="submit" ng-click="ctrl.submit($index)">Submit</md-button>
+          <md-button  ng-click="ctrl.cancel($index)">Cancel</md-button>
+        </div>
+      </form>
+      <md-card-actions flex layout layout-align="end start" ng-show="$index < 2 && !x.edit">
+        <md-button  class="md-icon-button" aria-label="Edit" ng-click="ctrl.edit($index)">
+          <md-icon md-font-set="material-icons">edit</md-icon>
+        </md-button>
+      </md-card-actions>
+    </md-card-content>
+  </md-card>
+  <md-card>
+    <md-card-header>
+      <md-card-header-text>
+        <div class="md-headline">Clinics</div>
+      </md-card-header-text>
+    </md-card-header>
+    <md-card-content>
+      <div ng-hide="ctrl.profile.Status.DoctorData.Clinics && ctrl.profile.Status.DoctorData.Clinics.length > 0">No Clinics</div>
+      <md-list class="md-dense">
+        <md-list-item class="md-3-line md-long-text" ng-class="{'back-aqua' : clinic.Curr}" ng-repeat="clinic in ctrl.profile.Status.DoctorData.Clinics track by $index" ng-click="ctrl.setcurrent($index)">
+          <img ng-src="{{clinic.ClinicLogo}}" class="md-avatar" alt="{{item.who}}" />
+          <div class="md-list-item-text" layout="column">
+            <h4>{{clinic.Name}}</h4>
+            <h4>{{clinic.ClinicSpec}}</h4>
+            <h4>{{clinic.Summary}}</h4>
+            <p>{{clinic.Address}}, {{clinic.City}}, {{clinic.PinCode}}</p>
+            <h5><md-icon md-font-set="material-icons">phone</md-icon> {{clinic.ClinicPhone}} <md-icon style="margin-left:10px" md-font-set="material-icons">email</md-icon> {{clinic.ClinicEmail}}</h5>
+          </div>
+        </md-list-item>
+      </md-list>
+    </md-card-content>
+  </md-card>
+  <md-card layout layout-align="center center">
+    <div>Signature</div>
+    <img style="width:200px;height:100px" src={{ctrl.profile.Status.DoctorData.DoctorSign}}></img>
+  </md-card>
+</md-content>

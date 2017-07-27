@@ -1,0 +1,43 @@
+{
+  "name": "rxhealth",
+  "version": "0.0.1",
+  "description": "An AngularJS Web implementation of the RxHealth App",
+  "homepage": "http://www.rxhealth.co",
+  "authors": [
+    "Abhishek Choudhary",
+    "Anurag Mishra",
+    "Sandeep Maharia",
+    "Tamoghna Biswas"
+  ],
+  "contributors": [
+    "Abhishek Choudhary",
+    "Sandeep Maharia",
+    "Tamoghna Biswas"
+  ],
+  "main": "index.html",
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.6.1",
+    "angular-ui-router": "^0.3.2",
+    "angular-material": "^1.1.1",
+    "angular-sanitize": "^1.6.1",
+    "angular-animate": "^1.6.1",
+    "angular-aria": "^1.6.1",
+    "angular-messages": "^1.6.1",
+    "angular-resource": "^1.6.1",
+    "angular-loading-bar": "^0.9.0",
+    "angular-ckeditor": "^1.0.3",
+    "angular-cookies": "^1.6.1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rdash/rdash-angular"
+  }
+}

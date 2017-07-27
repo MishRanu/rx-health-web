@@ -1,0 +1,17 @@
+<div layout="column" ng-style="ctrl.obj">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <div flex style="text-align : center">{{ctrl.condition}}</div>
+       <md-icon style="cursor:pointer" ng-click="ctrl.mdPanelRef.close()" aria-label="Close"> highlight_off </md-icon>
+    </div>
+  </md-toolbar>
+  <md-content flex layout-padding>
+     <p>{{condition}}</p>
+     <md-list>
+        <md-list-item ng-repeat="item in ctrl.symptoms"  class="noright">
+           <p>{{item.SymptomName}}</p>
+           <md-icon class="md-secondary md-hue-3 material-icons"  ng-click="ctrl.add($event,item)" aria-label="present Symptoms"> control_point </md-icon>
+        </md-list-item>
+     </md-list>
+  </md-content>
+</div>

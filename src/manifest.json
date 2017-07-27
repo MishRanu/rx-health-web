@@ -1,0 +1,11 @@
+{
+  "name": "RxHealth",
+  "short_name": "Rx",
+  "icons": [{
+        "src": "img/favicon.ico",
+        "sizes": "192x192"
+      }],
+  "start_url": "./index.html",
+  "display": "standalone",
+  "gcm_sender_id": "1081309838925"
+}

@@ -1,0 +1,238 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <div flex style="text-align : center">{{ctrl.profile.Status.UserData['First Name']}} {{ctrl.profile.Status.UserData['Last Name']}}</div>
+      <md-icon style="cursor:pointer" ng-click="ctrl.mdPanelRef.close()" aria-label="Close"> highlight_off </md-icon>
+  </div>
+</md-toolbar>
+<md-content id="patientprofilepanel" ng-style="ctrl.obj" style="padding-bottom:15px">
+  <md-tabs md-dynamic-height md-border-bottom md-selected="ctrl.selectedtab">
+    <md-tab label="About" ng-disabled="!ctrl.profile">
+      <md-content class="md-padding" style="padding-left: 12px">
+        <md-card layout-align="center" layout="column">
+          <div layout layout-align="center" style="padding-top:15px">
+            <img class="avatar" src="{{ctrl.profile.Status.UserData.Pic}}">
+          </div>
+          <md-card-content layout-align="center" layout>
+            <div>{{ctrl.profile.Status.UserData['First Name']}} {{ctrl.profile.Status.UserData['Last Name']}}</div>
+          </md-card-content>
+          <md-card-actions ng-if="ctrl.info.type == 1">
+            <form name="conForm" ng-submit="ctrl.confirmApp()">
+              <md-input-container class="md-block">
+                <label>Appointment Date</label>
+                <input type="datetime-local" ng-model="ctrl.con.date" name="condate" required>
+              </md-input-container>
+              <md-input-container class="md-block" >
+                <label>Fee Details</label>
+                <input type="text" ng-model="ctrl.con.fees" name="fees" disabled>
+              </md-input-container>
+              <md-input-container class="md-block">
+                <label>Doctor</label>
+                <md-select ng-model="ctrl.con.doc" required name="condoc">
+                  <md-option ng-repeat="doctor in ctrl.clinicdoctors" ng-value="doctor.DID">
+                    {{doctor.Name}}
+                  </md-option>
+                </md-select>
+              </md-input-container>
+              <md-button ng-disabled="ctrl.conformsubmitted" type="submit" ga-on="click" ga-event-category="Patientprofile" ga-event-action="confirm appointment" ng-disabled="ctrl.conformsubmitted" class="md-primary" aria-label="confirm appointment">Confirm Appointment</md-button>
+            </form>
+          </md-card-actions>
+          <md-card-actions ng-if="ctrl.info.type == 3">
+            <md-button ng-disabled="removefromcommunitybuttonclicked" md-no-ink class="md-primary" ng-if="ctrl.profile.Status.UserData.relation >= 1" aria-label="removefromcommu" ng-click="ctrl.removefromcommunity()">Remove</md-button>
+            <md-button ng-disabled="addtocommunitybuttonclicked" md-no-ink class="md-primary" ng-if="ctrl.profile.Status.UserData.relation <= 0" aria-label="athc" ng-click="ctrl.addtocommunity()">Add to Community</md-button>
+            <md-button ga-on="click" ga-event-category="Patientprofile" ga-event-action="diagnose" md-no-ink class="md-primary" aria-label="diagnose" ng-click="ctrl.diagnose()">New Diagnosis</md-button>
+          </md-card-actions>
+        </md-card>
+        <md-card ng-repeat="x in ctrl.contactdetails track by $index">
+          <md-card-title>
+            <md-card-title-text>
+              <div>{{x.head}}</div>
+            </md-card-title-text>
+          </md-card-title>
+          <md-card-content layout style="padding-bottom :0">
+            <md-list class="md-dense">
+              <md-list-item ng-repeat="y in x.contents" layout layout-align="center start">
+                <div style="font-size:14px">{{y}} : {{ctrl.profile.Status.UserData[y]}}</div>
+              </md-list-item>
+            </md-list>
+          </md-card-content>
+        </md-card>
+      </md-content>
+    </md-tab>
+    <md-tab label="Symptoms" ng-disabled="!ctrl.alldata">
+      <md-content class="md-padding">
+        <md-card class="card">
+          <md-card-contant>
+            <div class="item " style="padding: 15px" layout-align="space-between center">
+              <div layout="row" style="padding-bottom: 15px">
+                <div flex ="60" style="font-size:15px">{{ctrl.alldata.Name}}</div>
+                <div flex="25" style="font-size:14px"><span style = "color: #979A9A">Sex : </span>{{ctrl.alldata.Gender}}</div>
+                <div flex="15" style="font-size:14px"><span style = "color: #979A9A">Age : </span>{{ctrl.alldata.Age}}</div>
+              </div>
+              <div layout="row" style="font-size:14px; padding-bottom: 15px" layout-align="space-between center">
+                <div  flex="40" ng-if="ctrl.alldata.BloodGroup"><span style = "color: #979A9A">Blood Group: </span>{{ctrl.alldata.BloodGroup}}</div>
+                <div flex="30" ng-if="ctrl.alldata.Height"><span style = "color: #979A9A">Height : </span>{{ctrl.alldata.Height}} cm </div>
+                <div flex="30" ng-if="ctrl.alldata.Weight"><span style = "color: #979A9A">Weight : </span>{{ctrl.alldata.Weight}} kg</div>
+              </div>
+                <div ng-if="ctrl.alldata.Allergies" style="padding-bottom:15px ; font-size:14px"><span style = "color: #979A9A">Allergies : </span>{{ctrl.alldata.Allergies}}</div>
+                <div ng-if="ctrl.alldata.Hereditory" style="font-size:14px"><span style = "color: #979A9A">Hereditary : </span>{{ctrl.alldata.Hereditory}}</div>
+            </div>
+
+          <md-card-actions ng-if="ctrl.info.type == 3 && !ctrl.prescriptiondetails">
+            <div layout ="row">
+            <div flex="22" style="padding-right:15px; padding-left:10px"><md-button ga-on="click" ga-event-category="Patientprofile" ga-event-action="editDxMate" md-no-ink class="md-primary" aria-label="editsymptoms" ng-click="ctrl.updatesymptoms()">DIAGNOSE</md-button></div>
+            <div flex ="39" style="padding-right:15px"><md-button ga-on="click" ga-event-category="Patientprofile" ga-event-action="generatePrescription" md-no-ink class="md-primary" aria-label="generateprescription" ng-click="ctrl.generateprescription()">WRITE PRESCRIPTION</md-button></div>
+            <div flex ="39"><md-button  ga-on="click" ga-event-category="Patientprofile" ga-event-action="complete-without-prescription" md-no-ink class="md-primary" aria-label="complete-without-prescription" ng-click="ctrl.completeWithoutPrescription()">NO PRESCRIPTION REQUIRED</md-button></div>
+            </div>
+          </md-card-actions>
+        </md-card-contant></md-card>
+        <md-card ng-if="ctrl.alldata.Condition.length > 0">
+          <md-card-header>
+            <div >Conditions</div>
+          </md-card-header>
+          <md-card-content>
+            <md-list class="md-dense">
+              <md-list-item class="md-2-line" ng-repeat="item in ctrl.alldata.Condition" ng-click="getmatch($index)">
+                <div class="md-list-item-text">
+                   <p>{{item.ConditionName}} - {{item.CondProb}}%</p>
+                   <md-progress-linear md-mode="determinate" ng-value="{{item.CondProb}}"> </md-progress-linear>
+                </div>
+              </md-list-item>
+            </md-list>
+          </md-card-content>
+        </md-card>
+        <md-card ng-if="ctrl.alldata.DetailSymptom.length > 0">
+          <md-card-header>
+            <div>Symptoms</div>
+          </md-card-header>
+          <md-card-content>
+            <md-list class="md-dense">
+              <md-list-item class="md-2-line" ng-repeat="item in ctrl.alldata.DetailSymptom">
+                <div class="md-list-item-text">
+                   <p>{{item.Symptom}} - {{item.SymptomChoice}}</p>
+                </div>
+              </md-list-item>
+            </md-list>
+          </md-card-content>
+        </md-card>
+      </md-content>
+    </md-tab>
+    <md-tab label="Queries" ng-disabled="!ctrl.alldata.query">
+      <md-card>
+        <md-card-content>
+          <md-list class="md-dense">
+            <md-list-item class="md-3-line md-long-text" ng-repeat="item in ctrl.alldata.query">
+              <img ng-if="item.PQImg" ng-src="{{item.PQImg}}" class="md-avatar" alt="queryphoto">
+              <div class="md-list-item-text">
+                <p>Q- {{item.PQuery}}</p>
+                <p>A- {{item.DQuery}}</p>
+              </div>
+            </md-list-item>
+          </md-list>
+        </md-card-content>
+        <md-card-actions ng-if="ctrl.info.type == 3">
+          <md-button class="md-primary md-raised" aria-label="answer query" ng-click="ctrl.openanswerdialog($event)">Answer</md-button>
+        </md-card-actions>
+      </md-card>
+    </md-tab>
+    <md-tab label="Prescription" ng-disabled="!ctrl.prescriptiondetails">
+      <md-content layout="column">
+        <div layout="column" layout-padding>
+          <span class="font-12"><b style="font-size:21px">{{ctrl.prescriptiondetails.Status.Name}}</b> {{ctrl.prescriptiondetails.Status.Degree}} <div style="float:right"><b>Reg.No.:</b> {{ctrl.prescriptiondetails.Status.RegNo}}</div></span>
+          <div class="font-12"><md-icon md-font-set="material-icons">phone</md-icon> {{ctrl.prescriptiondetails.Status.Phone}}   <md-icon style="margin-left:10px" md-font-set="material-icons">email</md-icon> {{ctrl.prescriptiondetails.Status.Email}}</div>
+          <div class="font-12">{{ctrl.prescriptiondetails.Status.Address}}</div>
+        </div>
+        <md-divider></md-divider>
+        <div layout="column" layout-padding>
+          <div layout layout-align="space-around" class="font-12">
+            <p>Name: {{ctrl.prescriptiondetails.Status.PatientName}}</p>
+            <p>Age: {{ctrl.prescriptiondetails.Status.PatientAge}}</p>
+            <p>Gender: {{ctrl.prescriptiondetails.Status.PatientGender}}</p>
+          </div>
+        </div>
+        <div layout layout-align="center" ng-if="ctrl.prescriptiondetails.Status.Prescription && ctrl.prescriptiondetails.Status.Prescription.length > 0">
+          <table class="font-12">
+            <tr style="background-color: blue">
+              <th>Medicine</th>
+              <th>After Food</th>
+              <th>Days</th>
+              <th>Morning</th>
+              <th>Afternoon</th>
+              <th>Night</th>
+              <th>On Need</th>
+            </tr>
+            <tr ng-repeat="item in ctrl.prescriptiondetails.Status.Prescription track by $index">
+              <td>{{item.Medicine}}, <br>{{item.Dosage}} {{item.Type}}</td>
+              <td>{{(item.IsAfter == '1')?"Yes":"No"}}</td>
+              <td>{{item.Days}}</td>
+              <td><md-icon md-font-set="material-icons" ng-if="(item.Morning == '1')">done</md-icon></td>
+              <td><md-icon md-font-set="material-icons" ng-if="(item.Afternoon == '1')">done</md-icon></td>
+              <td><md-icon md-font-set="material-icons" ng-if="(item.Night == '1')">done</md-icon></td>
+              <td><md-icon md-font-set="material-icons" ng-if="(item.OnNeed == '1')">done</md-icon></td>
+            </tr>
+          </table>
+        </div>
+        <md-divider></md-divider>
+        <div style="padding:10px" ng-if="ctrl.prescriptiondetails.Status.Test && ctrl.prescriptiondetails.Status.Test.length > 0">
+        <h2 class="md-title">Tests</h2>
+        <md-chips ng-model="ctrl.prescriptiondetails.Status.Test" readonly="true">
+            <md-chip-template>
+                {{$chip.TestName}}
+            </md-chip-template>
+        </md-chips>
+        </div>
+        <div style="padding:10px" ng-if="ctrl.prescriptiondetails.Status.Comment">
+          Recommendation:
+          <p>{{ctrl.prescriptiondetails.Status.Comment}}</p>
+        </div>
+
+        <div style="width:100%">
+          <div style="float:right;margin-right:16px;margin-top:8px">
+            <img style="width:200px;height:100px" src="{{ctrl.prescriptiondetails.Status.Sign}}">
+            <div style="text-align:center">{{ctrl.prescriptiondetails.Status.Name}}</div>
+            <div style="text-align:center">{{ctrl.prescriptiondetails.Status.MedDate}}</div>
+          </div>
+        </div>
+        <form name="pressubmitform"  ng-if="ctrl.submitpres" ng-submit="ctrl.submit()">
+          <md-input-container style="padding:10px" class="md-block">
+            <label>Condition(Not visible to patient)</label>
+            <md-select name="condition" ng-model="ctrl.selectedCondition" required>
+              <md-option ng-repeat="condition in ctrl.submitpres.Status.Conditions" ng-value="condition.ConditionID">
+                {{condition.ConditionName}}
+              </md-option>
+            </md-select>
+          </md-input-container>
+          <md-input-container style="padding:10px" class="md-block">
+            <label>Payment Taken</label>
+            <input type="number" name="payment" ng-model = "ctrl.payment" required ng-disabled="ctrl.prescriptiondetails.Status.Payment">
+          </md-input-container>
+          <md-button type="submit" ng-disabled="pressubmitclicked || pressubmitform.condition.$invalid" ga-on="click" ga-event-category="Patientprofile" ga-event-action="sendPrescription" md-no-ink class="md-primary" aria-label="prescription-submit">SEND</md-button>
+        </form>
+      </md-content>
+    </md-tab>
+    <md-tab label="Notes" ng-disabled="!(ctrl.info.type == 3 || ctrl.prescriptiondetails || ctrl.prescriptiondetails.Status.Notes)">
+      <div style="padding-left: 12px" ng-if="!ctrl.editnotes">
+        Notes :
+        <p>{{ctrl.prescriptiondetails.Status.Notes.text}}</p>
+        <div layout>
+          <a ng-repeat="item in ctrl.prescriptiondetails.Status.Notes.files" ng-href="{{item.url}}" target="_blank">{{item.name}}</a>
+        </div>
+      </div>
+      <div ng-if="ctrl.editnotes">
+        <md-input-container class="md-block">
+            <label>Notes</label>
+            <textarea ng-model="ctrl.noteinstance.user.notes.text" md-maxlength="500" rows="10"></textarea>
+        </md-input-container>
+        <md-chips ng-model="ctrl.noteinstance.user.notes.files" readonly="true" md-removable="true" md-theme="default">
+            <md-chip-template layout layout-align="start center">
+              <md-progress-circular ng-disabled="$chip.status" class="md-accent" md-diameter="20px"></md-progress-circular>
+              <strong flex ng-show="$chip.status">{{$chip.name}}</strong>
+            </md-chip-template>
+        </md-chips>
+        <md-button style="overflow:hidden">
+          <input class="upload-overlay" md-no-ink class="md-primary" aria-label="add documnet" type="file" ng-files="ctrl.noteinstance.documentaddcallback($files)">Add Documents
+        </md-button>
+      </div>
+      <md-button ng-if="" class="md-primary" aria-label="edit notes" ng-click="ctrl.editnote()">{{(ctrl.editnotes)?"SAVE":"EDIT"}}</md-button>
+    </md-tab>
+  </md-tabs>
+</md-content>

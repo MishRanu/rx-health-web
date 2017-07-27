@@ -1,0 +1,30 @@
+<div ng-style="ctrl.obj" layout="column">
+  <md-toolbar>
+    <div class="md-toolbar-tools">
+      <div flex style="text-align : center">Case Study</div>
+      <md-icon style="cursor:pointer" ng-click="ctrl.mdPanelRef.close()" aria-label="Close"> highlight_off </md-icon>
+    </div>
+  </md-toolbar>
+  <md-content flex>
+     <md-card layout="column">
+       <md-card-content>
+          <md-input-container class="md-block" >
+              <label>Notes</label>
+               <textarea ng-model="ctrl.user.notes.text" md-maxlength="600" rows="14" ></textarea>
+          </md-input-container>
+          <md-chips ng-model="ctrl.user.notes.files" readonly="true" md-removable="true" md-theme="default">
+              <md-chip-template layout layout-align="start center">
+                <md-progress-circular ng-hide="$chip.status" class="md-accent" md-diameter="20px"></md-progress-circular>
+                <strong flex ng-show="$chip.status">{{$chip.name}}</strong>
+              </md-chip-template>
+          </md-chips>
+        </md-card-content>
+        <md-card-actions>
+          <md-button style="overflow:hidden">
+            <input class="upload-overlay" md-no-ink class="md-primary" aria-label="add documnet" type="file" ng-files = "ctrl.documentaddcallback($files)">Add Documents</input>
+          </md-button>
+          <md-button class="md-primary md-raised" ng-click="ctrl.mdPanelRef.close()">Save and Continue</md-button>
+        </md-card-actions>
+     </md-card>
+  </md-content>
+</div>

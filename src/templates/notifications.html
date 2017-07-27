@@ -1,0 +1,40 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <div>Notifications</div>
+    <!-- <md-switch ng-model="on" class="md-warm" style = "padding-left: 20px" aria-label="Switch 1"></md-switch> -->
+    <md-button  flex style="height:0px"></md-button>
+    <md-button  aria-label="markall" ng-click ="markall()">Mark all read</md-button>
+  </div>
+</md-toolbar>
+<md-content style="height : 400px">
+  <md-list>
+    <md-divider></md-divider>
+
+    <md-list-item class="list-initial" ng-repeat = "notification in notifications.$data.Status.Notifications" ng-style="{'background-color' : notification.Viewed}" ng-click="opennotification(notification)">
+      <img ng-src="{{notification.Pic}}" class="md-avatar">
+      <div class="md-list-item-text">
+        <div class="font-12">{{notification.Summary}}</div>
+        <div class="font-12">{{stringify(notification.NGT)}}</div>
+      </div>
+      <md-button ng-if = "notification.Type == 11 && notification.Viewed == '#f6f6f6'" class ="md-secondary md-primary md-icon-button" ng-click="accrej(true,$index)">
+        <md-icon md-font-set = "material-icons">done</md-icon>
+      </md-button>
+      <md-button ng-if = "notification.Type == 11 && notification.Viewed == '#f6f6f6'" class ="md-secondary md-warn md-icon-button" ng-click="accrej(false,$index)">
+        <md-icon md-font-set = "material-icons">clear</md-icon>
+
+      </md-button>
+      <md-divider></md-divider>
+    </md-list-item>
+
+
+
+  <!--    <md-list-item  ng-if ="notification.Type = 11 || 12 || 13 || 18" ng-repeat = "notification in notifications.$data.Status.Notifications" class="md-2-line" ng-click="opennotification(notification)" ng-style="{'background-color' : notification.Viewed}">
+      <img ng-src="{{notification.Pic}}" class="md-avatar">
+      <div>
+        <div style="font-size : 12px">{{notification.Summary}}</div>
+        <div style="font-size : 12px">{{stringify(notification.NGT)}}</div>
+      </div>
+      <md-divider></md-divider>
+    </md-list-item> -->
+  </md-list>
+</md-content>

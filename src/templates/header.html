@@ -1,0 +1,50 @@
+<md-toolbar class="md-hue-1" style="background-color : #ffffff;z-index:0;height:7vh;max-height:7vh;min-height:7vh">
+  <div class="md-toolbar-tools">
+    <md-button  class="md-icon-button" aria-label="Settings" ng-click="toggle()">
+      <md-icon md-font-set="material-icons">dehaze</md-icon>
+    </md-button>
+    <h5 hide-xs>{{info.name}}/{{info.current.toUpperCase()}}</h5>
+    <div ng-show="info.type == 3" flex style="padding-left:8px;padding-right:8px">
+      <md-autocomplete
+         ng-disabled="false"
+         md-no-cache="noCache"
+         md-selected-item="selectedItem"
+         md-search-text="searchText"
+         md-selected-item-change="setModelSymptom(item)"
+         md-items="item in searchTextChange(searchText)"
+         md-item-text="item.Name"
+         md-min-length="3"
+         placeholder="Search People, Communities and Articles"
+         md-theme="default">
+         <md-item-template>
+            <span md-highlight-text="searchText" md-highlight-flags="^i">{{item.Name}}</span>
+         </md-item-template>
+         <md-not-found>
+            No states matching "{{searchText}}" were found.
+            <!--               <a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>
+               -->
+         </md-not-found>
+      </md-autocomplete>
+    </div>
+    <span flex ng-if="info.type < 3"></span>
+    <md-menu-bar style="padding : 0px">
+      <md-menu ng-if="info.type == 3" md-position-mode="target-right target" md-offset="0 65">
+        <md-button ga-on="click" ga-event-category="Web" ga-event-action="notification" class="md-icon-button" aria-label="Notifications" ng-click="sho=true;$mdOpenMenu($event);" style="padding:10px 45px 0px 10px">
+          <md-icon md-font-set="material-icons">notifications</md-icon>
+          <div ng-show="!sho" ng-if ="info.badge > 1" class="badge">{{info.badge}}</div>
+        </md-button>
+        <md-menu-content width="4" style="padding-left:10px">
+          <notifications></notifications>
+        </md-menu-content>
+      </md-menu>
+      <md-menu md-position-mode="target-right target" md-offset="0 65">
+        <md-button ga-on="click" ga-event-category="Web" ga-event-action="profile" class="md-icon-button" aria-label="Profile" ng-click = "$mdOpenMenu($event)">
+          <md-icon md-font-set="material-icons">person</md-icon>
+        </md-button>
+        <md-menu-content>
+          <profile></profile>
+        </md-menu-content>
+      </md-menu>
+    </md-menu-bar>
+  </div>
+</md-toolbar>

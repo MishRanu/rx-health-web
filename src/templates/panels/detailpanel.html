@@ -1,0 +1,37 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <div style ="font-size: small" flex>{{ctrl.feed.data.Header}}</div>
+    <span flex></span>
+    <md-button class="md-icon-button" ng-if = "!ctrl.readonly && ctrl.feed.data.action == 1" aria-label="Follow" ng-disabled="{{ctrl.feed.followdisabled}}" ng-click="ctrl.feed.$follow()">
+     <md-icon md-font-set="material-icons">supervisor_account</md-icon>
+    </md-button>
+    <a class="subdued" ng-if="!ctrl.readonly && (ctrl.feed.data.action > 1) && !(ctrl.feed.data.Likes =='0')">{{ctrl.feed.data.Likes}}</a>
+    <md-button class="md-icon-button" ng-if = "ctrl.feed.data.action > 1" aria-label="Like" ng-disabled="{{ctrl.feed.likedisabled}}" ng-click="ctrl.feed.$like()">
+      <md-icon md-font-set="material-icons" ng-class="{ 'md-warn' : ctrl.feed.data.Liked}"> thumb_up </md-icon>
+    </md-button>
+    <a class="subdued" ng-if="!ctrl.readonly && (ctrl.feed.data.action > 2) && !(ctrl.feed.data.Comments=='0')">{{ctrl.feed.data.Comments}}</a>
+    <md-button  ng-if = "ctrl.feed.data.action > 2" class="md-icon-button" aria-label="comment" ng-click="ctrl.feed.$comment()">
+      <md-icon md-font-set="material-icons">comment</md-icon>
+    </md-button>
+    <md-button ng-if = "!ctrl.readonly && ctrl.feed.data.action > 1 && ctrl.feed.data.action < 4" class="md-icon-button" aria-label="Bookmark" ng-disabled="{{ctrl.feed.bookmarkdisabled}}" ng-click="ctrl.feed.$bookmark()">
+      <md-icon md-font-set="material-icons" ng-class="{'md-warn' : ctrl.feed.data.Bookmarked}">bookmark</md-icon>
+    </md-button>
+    <md-button ng-if = "!ctrl.readonly && ctrl.feed.data.action > 2" class="md-icon-button" aria-label="Share" ng-disabled="{{ctrl.feed.sharedisabled}}" ng-click="ctrl.feed.$share($event, communities)">
+        <md-icon md-font-set="material-icons">share</md-icon>
+    </md-button>
+  </div>
+</md-toolbar>
+<md-content ng-style="ctrl.obj" layout-padding layout="column">
+  <md-card style="display:initial">
+    <img ng-if = "ctrl.feed.data.ImageLink"  ng-src= "{{ctrl.feed.data.ImageLink}}" class="md-card-image" alt="Image">
+    <md-card-title>
+      <md-card-title-text>
+       <span class="md-headline"> {{ctrl.feed.data.Header}} </span>
+      </md-card-title-text>
+    </md-card-title>
+    <md-card-content>
+        <div ng-bind-html= "ctrl.feed.data.Details" ></div>
+        <a ng-if = "ctrl.feed.data.Link.length > 0" ng-href="{{ctrl.feed.data.Link}}">References</a>
+    </md-card-content>
+  </md-card>
+</md-content>

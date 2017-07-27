@@ -1,0 +1,102 @@
+<md-toolbar style="min-height:7vh;height:7vh;max-height:7vh">
+   <div class="md-toolbar-tools">
+       <div layout="row">
+           <h1 class="md-title" style="color:white">Diagnosis of your patient {{u.name}}, {{u.phone}}, {{u.gender}} {{u.age}} years</h1>
+       </div>
+       <span flex></span>
+       <md-fab-speed-dial md-direction="left" ng-class="md-fling">
+           <md-fab-actions>
+           <md-button ng-click="cancel()" class="md-raised md-primary">
+                 Cancel
+               </md-button>
+           <md-button ga-on="click" ga-event-category="DxMate" ga-event-action="proceedWithDxMate" ng-click="createPrescription()" ng-if="evidence.length>0"  class="md-raised md-primary"ng-disabled="patientForm.$invalid">Generate Eprescription</md-button>
+
+               <!-- <md-button ng-click="submit()" ng-if="evidence.length>0"  class="md-raised md-primary" ng-disabled="patientForm.$invalid">Submit</md-button> -->
+           </md-fab-actions>
+       </md-fab-speed-dial>
+   </div>
+</md-toolbar>
+
+<md-card style="height:5vh">
+  <md-autocomplete
+     ng-disabled="isDisabled"
+     md-no-cache="noCache"
+     md-selected-item="selectedItem"
+     md-search-text="searchText"
+     md-selected-item-change="setModelSymptom(item)"
+     md-items="item in searchTextChange(searchText)"
+     md-item-text="item.name"
+     md-min-length="3"
+     placeholder="Search Symptoms"
+     md-theme="default">
+     <md-item-template>
+        <span md-highlight-text="searchText" md-highlight-flags="^i">{{item.name}}</span>
+     </md-item-template>
+     <md-not-found>
+        No states matching "{{searchText}}" were found.
+        <!--               <a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>
+           -->
+     </md-not-found>
+  </md-autocomplete>
+</md-card>
+</div>
+<div layout style="height:85vh">
+  <md-card flex="50" layout-margin md-theme="cardTheme" >
+    <md-content ng-if="evidence.length>0">
+      <md-list>
+         <md-subheader class="md-no-sticky">Symptom selected</md-subheader>
+         <md-list-item ng-repeat="item in evidence"  class="noright">
+            <p>{{item.name}} - {{item.choice_id}}</p>
+            <md-icon ng-show="item.choice_id == 'present'" class="md-secondary md-hue-3 material-icons"  ng-click="present($event,item)" aria-label="present Symptoms"> check_circle </md-icon>
+            <md-icon ng-show="item.choice_id == 'absent'" class="md-secondary md-hue-3 material-icons"  ng-click="present($event,item)" aria-label="present Symptoms"> done </md-icon>
+            <md-icon ng-show="item.choice_id == 'present'" class="md-secondary md-hue-3 material-icons"  ng-click="absent($event,item)" aria-label="absent Symptoms"> clear </md-icon>
+            <md-icon ng-show="item.choice_id == 'absent'" class="md-secondary md-hue-3 material-icons"  ng-click="absent($event,item)" aria-label="absent Symptoms"> cancel </md-icon>
+            <md-icon class="md-secondary md-hue-3 material-icons"  ng-click="onSymptomDelete($event,item)" aria-label="Delete Symptoms"> delete </md-icon>
+         </md-list-item>
+      </md-list>
+     </md-content>
+  </md-card>
+  <md-card flex="50" md-theme="cardTheme" layout layout-margin>
+    <md-tabs flex md-border-bottom md-selected="selectedIndexSym" ng-if="showcond">
+       <md-tab label="Next Question">
+        <rd-loading loading = "questionloading">
+          <md-content class="md-padding">
+             <p>{{matchdata.question.text}}</p>
+             <md-list>
+                <md-list-item ng-repeat="item in matchdata.question.items"  class="noright">
+                   <p>{{item.name}}</p>
+                   <md-icon class="md-secondary md-hue-3 material-icons"  ng-click="add2($event,item, 'present')" aria-label="present Symptoms"> control_point </md-icon>
+                   <md-icon ng-if = "matchdata.question.type == 'single'" class="md-secondary md-hue-3 material-icons"  ng-click="add2($event,item, 'absent')" aria-label="absent Symptoms"> highlight_off </md-icon>
+                </md-list-item>
+             </md-list>
+          </md-content>
+        </rd-loading>
+       </md-tab>
+       <md-tab label="Conditions">
+          <md-content class="md-padding">
+             <md-list>
+               <md-subheader class="md-no-sticky md-title" ng-show="common && common.length > 0">Common Conditions</md-subheader>
+               <md-divider></md-divider>
+               <md-list-item ng-repeat="item in common" ng-click="getmatch(item)" class="md-2-line">
+                 <div class="md-list-item-text" layout="column">
+                   <p>{{item.ConditionName}} - {{item.CondProb}}%</p>
+                   <md-progress-linear md-mode="determinate" ng-value="{{item.CondProb}}"> </md-progress-linear>
+                 </div>
+               </md-list-item>
+               <md-subheader class="md-no-sticky md-title" ng-show="rare && rare.length > 0">Rare Conditions</md-subheader>
+               <md-divider ng-show="rare && rare.length > 0"></md-divider>
+               <md-list-item ng-repeat="item in rare" ng-click="getmatch(item)" class="md-2-line">
+                 <div class="md-list-item-text" layout="column">
+                   <p>{{item.ConditionName}} - {{item.CondProb}}%</p>
+                   <md-progress-linear md-mode="determinate" ng-value="{{item.CondProb}}"> </md-progress-linear>
+                 </div>
+               </md-list-item>
+             </md-list>
+          </md-content>
+       </md-tab>
+    </md-tabs>
+    <md-button ga-on="click" ga-event-category="DxMate" ga-event-action="addNotes" class="md-fab md-whiteframe-15dp fab-absolute md-primary" aria-label="Add Notes" ng-click="$notes(user)">
+     <md-icon md-font-set="material-icons">assignment</md-icon>
+    </md-button>
+  </md-card>
+</div>

@@ -1,0 +1,23 @@
+<div ng-cloak layout-fill>
+
+  <!-- Sidebar -->
+  <!-- End Sidebar -->
+  <div class="page-content" layout-fill layout = "column">
+
+    <!-- Header Bar -->
+    <header flex="initial"></header>
+    <section layout flex style="height:93vh">
+      <md-sidenav
+              class="md-sidenav-left"
+              md-component-id="left"
+              md-whiteframe="4" style="overflow : hidden">
+        <sidebar></sidebar>
+      </md-sidenav>
+      <div ui-view name="appContent" flex style="height:93vh" layout></div>
+    </section>
+    <!-- End Header Bar -->
+
+    <!-- Main Content -->
+
+  </div><!-- End Page Content -->
+</div><!-- End Page Wrapper -->

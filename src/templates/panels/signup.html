@@ -1,0 +1,88 @@
+<md-toolbar  >
+  <div class="md-toolbar-tools">
+    <div flex style="text-align : center">New User</div>
+    <md-icon style="cursor:pointer" ng-click="ctrl.mdPanelRef.close()" aria-label="Close"> highlight_off </md-icon>
+  </div>
+</md-toolbar>
+
+<form name="signupform" ng-submit="ctrl.sendOTP(user)">
+<md-content ng-style="ctrl.obj" layout="column">
+  <md-card layout-align="center" layout="column">
+        <div layout>
+            <md-input-container class="md-block" flex="50">
+            <label>First Name</label>
+            <input required md-no-asterisk name="fname" ng-required="true" ng-model="user.fname" ng-disabled ="!ctrl.messi">
+            <!-- <div ng-messages="signupform.fname.$error">
+              <div ng-message="required">First Name is Required</div>
+          </div> -->
+          </md-input-container>
+          <md-input-container class="md-block" flex="50">
+            <label>Last Name </label>
+            <input  required md-no-asterisk name="lname" ng-required="true" ng-model="user.lname" ng-disabled ="!ctrl.messi">
+            <!-- <div ng-messages="signupform.lname.$error">
+              <div ng-message="required">Last Name is Required</div>
+          </div> -->
+          </md-input-container>
+        </div>
+
+        <md-input-container class="md-block">
+            <label>Email </label>
+            <input type ="email" required md-no-asterisk name="email" ng-required="true" ng-model="user.email" ng-disabled ="!ctrl.messi">
+             <div ng-messages="signupform.email.$error">
+              <div ng-message="required">Enter valid email</div>
+          </div>
+        </md-input-container>
+        <md-input-container class="md-block">
+            <label>Phone Number </label>
+            <input type = "number" limit-to = "10" required md-no-asterisk name="phone" ng-required="true" min = "1000000000" max = "9999999999" ng-model= "user.phone" ng-disabled ="!ctrl.messi">
+             <div ng-messages="signupform.phone.$error">
+             <!--  <div ng-message="required">Phone Number is Required</div> -->
+              <div ng-message="min,max">Please Enter 10 Digit Phone Number</div>
+          </div>
+        </md-input-container>
+
+      <!--     <md-input-container class="md-block" >
+            <label>Select an Association</label>
+             <md-select required md-no-asterisk name="regassoc" ng-required="true" ng-model="user.regassoc" ng-disabled ="!ctrl.messi" >
+              <md-option ng-repeat="item in ctrl.council" ng-value="item.CouncilID">
+                {{item.Council}}
+              </md-option>
+             </md-select>
+             <div ng-messages="signupform.regassoc.$error"> -->
+          <!--     <div ng-message="required">Association is Required</div> -->
+          <!--    </div>
+          </md-input-container> -->
+<!-- 
+        <md-input-container class="md-block" >
+            <label>Registration Number </label>
+            <input  required md-no-asterisk name="regno" ng-required="true" ng-model="user.regno" ng-disabled ="!ctrl.messi">
+             <div ng-messages="signupform.regno.$error"> -->
+<!--               <div ng-message="required">Registration Number is Required</div>
+ -->        <!--   </div>
+        </md-input-container> -->
+    <!-- </md-card>
+      <md-card layout-align="center" layout="column" > -->
+<!--          <md-input-container class="md-block" style ="margin-bottom: -2px" >
+          <label> Registration Year </label>
+            <input type ="number" limit-to = "4" min="1947" max="{{ctrl.today.getFullYear()}}" step="1" value="2010" required md-no-asterisk name="regyear" ng-model= "user.regyear" ng-disabled ="!ctrl.messi">
+             <div ng-messages="signupform.regyear.$error">
+
+          </div>
+          </md-input-container> -->
+
+      </md-card>
+          <div style="margin-left:15px">
+          <md-checkbox layout-align="center" md-no-ink aria-label="Checkbox No Ink" ng-model="user.isChecked" required md-no-asterisk name="isChecked" class="md-primary" ng-disabled ="!ctrl.messi">
+          I agree to the <a class="md-secondary" ng-click ="ctrl.tncs()">Terms and Conditions</a>
+          </md-checkbox>
+         </div>
+           <md-button  ga-on="click" ga-event-category="SignUp" ga-event-action="register" type="submit" class="md-raised md-primary" layout-align ="center center" ng-disabled="signupform.$invalid || !ctrl.messi ">REGISTER</md-button>
+
+          <md-input-container class="md-block" ng-hide = "ctrl.messi">
+            <label>OTP </label>
+            <input type ="number"  ng-model="user.otp">
+              <md-button class="pull-right md-raised md-primary"  ng-click="ctrl.sendOTP(user)">Resend Otp </md-button>
+              <md-button ga-on="click" ga-event-category="SignUp" ga-event-action="verify" class="md-raised md-primary" layout-align ="center center" ng-click="ctrl.verifyOTP(user)">Verify</md-button>
+          </md-input-container>
+</md-content>
+</form>

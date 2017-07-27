@@ -1,0 +1,47 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <div flex style="text-align : center">Clinic</div>
+  </div>
+</md-toolbar>
+<md-content ng-style="ctrl.obj">
+  <div layout layout-align="center" ng-if="ctrl.clinic.ClinicLogo || ctrl.loading">
+    <md-progress-circular ng-if="ctrl.loading" md-mode="indeterminate"></md-progress-circular>
+    <img ng-if = "!ctrl.loading" class="avatar" src={{ctrl.clinic.ClinicLogo}}></img>
+  </div>
+  <div layout layout-align="center">
+    <md-button style="overflow:hidden">
+      <input class="upload-overlay" aria-label="edit-clinic-logo" type="file" accept="image/*" ng-files = "ctrl.logocallback($files)">Edit Logo</input>
+    </md-button>
+  </div>
+  <form name="clinicform" ng-submit="ctrl.submit()" layout-padding>
+    <md-input-container class="md-block">
+      <label>Name</label>
+      <input type="text" required md-no-asterisk name="name" ng-model="ctrl.clinic.Name">
+    </md-input-container>
+    <md-input-container class="md-block">
+      <label>Summary</label>
+      <input type="text" name="summary" ng-model="ctrl.clinic.Summary">
+    </md-input-container>
+    <md-input-container class="md-block">
+      <label>Address</label>
+      <textarea type="text" required md-no-asterisk name="address" ng-model="ctrl.clinic.Address"></textarea>
+    </md-input-container>
+    <md-input-container class="md-block">
+      <label>City</label>
+      <input type="text" required md-no-asterisk name="city" ng-model="ctrl.clinic.City">
+    </md-input-container>
+    <md-input-container class="md-block">
+      <label>PinCode</label>
+      <input type="text" pattern="[0-9]*" maxlength="6" required md-no-asterisk name="pincode" ng-model="ctrl.clinic.PinCode">
+    </md-input-container>
+    <md-input-container class="md-block">
+      <label>Email</label>
+      <input type="email" name="email" ng-model="ctrl.clinic.ClinicEmail">
+    </md-input-container>
+    <md-input-container class="md-block">
+      <label>Phone</label>
+      <input type="tel" name="phone" ng-model="ctrl.clinic.ClinicPhone">
+    </md-input-container>
+    <md-button type="submit" class="md-primary md-raised" aria-label="submit clinic">SUBMIT</md-button>
+  </form>
+</md-content>

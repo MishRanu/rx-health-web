@@ -1,0 +1,148 @@
+<md-content layout-margin layout-fill layout>
+  <div flex = "66" layout="column" layout-margin>
+    <md-card flex layout-margin layout="column" md-theme="cardTheme">
+      <md-toolbar class="md-primary" flex="initial">
+        <div class="md-toolbar-tools">
+          <img ng-if="infiniteItems.community" ng-src="{{infiniteItems.community.Status.Pic}}" class="avatar"></img>
+          <h4 style ="padding-left: 20px" class="md-flex">{{infiniteItems.title || 'Feed'}}</h4>
+          <span flex></span>
+          <md-button ng-if="infiniteItems.title" class="md-icon-button" aria-label="Bookmarked" ng-click="infiniteItems.refresh('all')">
+           <md-icon md-font-set="material-icons">cancel</md-icon>
+          </md-button>
+          <md-button ng-if="!infiniteItems.title" class="md-icon-button" aria-label="Bookmarked" ng-click="infiniteItems.refresh('bookmark', 'Bookmarked Article')">
+           <md-icon md-font-set="material-icons">bookmark_border</md-icon>
+          </md-button>
+          <md-button class="md-icon-button" aria-label="Refresh" ng-click="infiniteItems.refresh()">
+           <md-icon md-font-set="material-icons">refresh</md-icon>
+          </md-button>
+           <md-button ng-disabled = "infiniteItems.infoloading" ng-if="infiniteItems.community" class="md-icon-button" aria-label="more" ng-click = "infiniteItems.info()">
+           <md-icon md-font-set="material-icons">more_vert</md-icon>
+          </md-button>
+        </div>
+      </md-toolbar>
+      <md-content flex layout = "column">
+        <rd-loading loading="infiniteItems.loading">
+          <div flex style="width : 100%" layout-align="center center">
+            <div ng-repeat="item in infiniteItems.feeds" flex layout = "column" layout-padding>
+              <md-card style="width:416px;margin:auto;" ng-cloak>
+                <md-card-header>
+                  <md-card-avatar>
+                    <img style="height : inherit" class="md-user-avatar" ng-src="{{item.data.Pic}}"/>
+                  </md-card-avatar>
+                  <md-card-header-text>
+                    <span class="md-title">{{item.data.Author}}</span>
+                    <span class="md-subhead">{{stringifi(item.data.LastEdited)}}</span>
+                  </md-card-header-text>
+                  <span flex></span>
+                  <md-menu md-position-mode="target-right target" ng-if = "item.data.IsAuthor == '1' && item.data.UserID == IDE">
+                    <md-button aria-label="Open Feed Menu" class="md-icon-button" ng-click="$mdOpenMenu($event)">
+                      <md-icon md-menu-origin md-font-set="material-icons">keyboard_arrow_down</md-icon>
+                    </md-button>
+                    <md-menu-content width="2" >
+                      <md-menu-item>
+                        <md-button class="popover-buttons" ng-click="item.$edit()" aria-label = "Edit Feed">Edit</md-button>
+                      </md-menu-item>
+                      <md-menu-item>
+                        <md-button class="popover-buttons" aria-label = "Delete Feed" ng-click="item.$delete(item.data.ShrID)">Delete</md-button>
+                      </md-menu-item>
+                    </md-menu-content>
+                  </md-menu>
+                </md-card-header>
+                <md-card-title>
+                  <md-card-title-text>
+                    <p class="md-title" style="color:blue"><i>{{item.data.Summary}}</i></p>
+                    <span class="md-title"> {{item.data.Header}} </span>
+                  </md-card-title-text>
+                </md-card-title>
+                <img ng-if = "item.data.ImageLink" style="height : 250px; width : 400px" ng-src= "{{item.data.ImageLink}}" class="md-card-image" alt="Image">
+                <md-card-content>
+                  <!-- <a ng-class="{'md-button' : (item.data.Link.length > 0)}" ng-href="{{item.data.Link}}" layout-fill target="_blank"> -->
+                  <div class="wrap-children" ng-bind-html= "item.data.Details" layout-align="center"></div>
+                  <div ng-click="item.$detail()" ng-if="item.overflow" style="color : blue; font-size:smaller; cursor:pointer"><u>Read More</u></div>
+                </md-card-content>
+                <md-card-actions layout="row" layout-align="end center">
+                  <md-button class="md-icon-button" ng-if = "item.data.action == 1" aria-label="Follow" ng-disabled="{{item.followdisabled}}" ng-click="item.$follow()">
+                   <md-icon md-font-set="material-icons">supervisor_account</md-icon>
+                  </md-button>
+                  <a class="subdued" ng-if="(item.data.action > 1) && !(item.data.Likes =='0')">{{item.data.Likes}}</a>
+                  <md-button class="md-icon-button" ng-if = "item.data.action > 1" aria-label="Like" ng-disabled="{{item.likedisabled}}" ng-click="item.$like()">
+                    <md-icon md-font-set="material-icons" ng-class="{ 'md-primary' : item.data.Liked}"> thumb_up </md-icon>
+                  </md-button>
+                  <a class="subdued" ng-if="(item.data.action > 2) && !(item.data.Comments=='0')">{{item.data.Comments}}</a>
+                  <md-button ng-if = "item.data.action > 2" class="md-icon-button" aria-label="comment" ng-click="item.$comment()">
+                    <md-icon md-font-set="material-icons">comment</md-icon>
+                  </md-button>
+                  <md-button ng-if = "item.data.action > 1 && item.data.action < 4" class="md-icon-button" aria-label="Bookmark" ng-disabled="{{item.bookmarkdisabled}}" ng-click="item.$bookmark()">
+                    <md-icon md-font-set="material-icons" ng-class="{'md-primary' : item.data.Bookmarked}">bookmark</md-icon>
+                  </md-button>
+                  <md-button ng-if = "item.data.action > 2" class="md-icon-button" aria-label="Share" ng-disabled="{{item.sharedisabled}}" ng-click="item.$share($event, communities)">
+                      <md-icon md-font-set="material-icons">share</md-icon>
+                  </md-button>
+                </md-card-actions>
+              </md-card>
+            </div>
+            <div ng-show="infiniteItems.feeds.length > 0" layout layout-align="center center">
+              <md-button aria-label="load more" ng-disabled="infiniteItems.end" ng-click="infiniteItems.fetchMoreItems_()">{{(infiniteItems.end)?"No more feeds":"Load More"}}</md-button>
+            </div>
+          </div>
+        </rd-loading>
+      </md-content>
+      <md-button class="md-fab md-whiteframe-15dp fab-absolute md-primary" aria-label="Add Article" ng-click="infiniteItems.newArticle(communities)">
+        <md-tooltip md-theme="dark" style="color:cyan" md-direction="top">New Article</md-tooltip>
+        <md-icon md-font-set="material-icons">add</md-icon>
+      </md-button>
+    </md-card>
+  </div>
+  <div flex layout-margin layout="column">
+    <md-card flex layout-margin layout="column" md-theme="cardTheme">
+      <md-toolbar class="md-primary">
+        <div class="md-toolbar-tools">
+          <h4 class="md-flex">Communities</h4>
+        </div>
+      </md-toolbar>
+      <md-content layout="column" flex>
+        <rd-loading loading="!communities.$data.$resolved">
+          <md-radio-group ng-model="selected" layout class ="md-primary" style="padding:3px">
+            <md-radio-button value="all">All </md-radio-button>
+            <md-radio-button value="connected">Connected</md-radio-button>
+            <md-radio-button value="my">My</md-radio-button>
+            <md-radio-button value="following">Following</md-radio-button>
+          </md-radio-group>
+          <md-list>
+            <md-subheader ng-show="selected == 'all' || selected == 'my'" class="md-no-sticky">My Communities</md-subheader>
+            <md-list-item ng-click = "infiniteItems.refresh('community', item.Name, item.CommuID)" ng-show="selected == 'all' || selected == 'my'" ng-repeat="item in communities.$data.Status.myCommunities" class="md-2-line">
+              <div>
+                <h5>Creator</h5>
+                <p>{{item.Name}}</p>
+              </div>
+              <md-divider></md-divider>
+            </md-list-item>
+            <md-list-item ng-click = "infiniteItems.refresh('community', item.Name, item.CommuID)" ng-show="selected == 'all' || selected == 'my'" ng-repeat="item in communities.$data.Status.adminCommunities" class="md-2-line">
+              <div>
+                <h5>Admin</h5>
+                <p>{{item.Name}}</p>
+              </div>
+              <md-divider></md-divider>
+            </md-list-item>
+            <md-subheader ng-show="(selected == 'all' || selected == 'connected') && communities.$data.Status.connectCommunities.length > 0" class="md-no-sticky">Connected Communities</md-subheader>
+            <md-list-item ng-click = "infiniteItems.refresh('community', item.Name, item.CommuID)" ng-show="selected == 'all' || selected == 'connected'" ng-repeat="item in communities.$data.Status.connectCommunities" class="md-2-line">
+              <div>
+                <h5>Connection</h5>
+                <p>{{item.Name}}</p>
+              </div>
+              <md-divider></md-divider>
+            </md-list-item>
+            <md-subheader ng-show="(selected == 'all' || selected == 'following') && communities.$data.Status.following.length > 0" class="md-no-sticky">Following Communities</md-subheader>
+            <md-list-item ng-click = "infiniteItems.refresh('community', item.Name, item.CommuID)" ng-show="selected == 'all' || selected == 'following'" ng-repeat="item in communities.$data.Status.following" class="md-2-line">
+              <div>
+                <h5>Following</h5>
+                <p>{{item.Name}}</p>
+              </div>
+              <md-divider></md-divider>
+            </md-list-item>
+          </md-list>
+        </rd-loading>
+      </md-content>
+    </md-card>
+  </div>
+</md-content>

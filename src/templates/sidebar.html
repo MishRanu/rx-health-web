@@ -1,0 +1,22 @@
+<md-toolbar style="min-height:20vh;max-height:20vh;height:20vh;background : url(img/app_cover.png)">
+  <h1 class="md-toolbar-tools">{{info.current.toUpperCase()}}</h1>
+</md-toolbar>
+<div style="min-height:80vh;max-height:80vh;height:80vh" layout = "column">
+ <md-list flex="66">
+      <md-list-item class="md-1-line" ng-repeat="item in sidebar" ng-click="closeSidebar(item)">
+        <h4>{{item.Name}}</h4>
+        <md-divider></md-divider>
+      </md-list-item>
+      <md-list-item class="md-1-line" ng-if="info.type == 2" ng-click="sendreq()">
+        <h4>Add Community</h4>
+        <md-divider></md-divider>
+      </md-list-item>
+  </md-list>
+  <div flex="33" layout="column" layout-align="end">
+  	<md-divider></md-divider>
+  	<div layout>
+  		<md-button style="margin:0px" flex="50" layout layout-align="center" ng-click = "show('about-us')" ><a>About Us</a></md-button>
+  		<md-button style="margin:0px" flex="50" layout layout-align="center" ng-click = "show('tncs')" ><a>TnCS</a></md-button>
+  	</div>
+  </div>
+</div>

@@ -1,0 +1,162 @@
+<form flex layout="column" name="presForm" ng-submit="proceed()" style="margin-bottom : 0px">
+<md-toolbar style="min-height:7vh;height:7vh;max-height:7vh">
+  <div class="md-toolbar-tools">
+    <div layout="row">
+        <h1 class="md-title" style="color:white">E-Prescription {{user.name}}, {{user.phone}}, {{user.gender}} {{user.age}} years</h1>
+    </div>
+    <span flex></span>
+    <md-button ng-disabled = "proceedbuttonclicked" ga-on="click" ga-event-category="DxMate" ga-event-action="proceedWithPrescription"  type="submit" class="md-raised md-primary" ng-disabled="presForm.$invalid">Proceed</md-button>
+    <md-button  ng-click="cancel()" class="md-raised md-primary">
+      Cancel
+    </md-button>
+  </div>
+</md-toolbar>
+<md-content layout-margin layout style="height : 90vh">
+ <div flex layout="column" ng-if="!patientinfo">
+  <md-card class="md-whiteframe-5dp" layout-margin md-theme="cardTheme" >
+    <md-content>
+       <md-tabs md-dynamic-height>
+          <md-tab label="Medicines">
+             <md-content class="md-padding">
+                <md-autocomplete
+                  ng-disabled="isDisabled"
+                  md-no-cache="noCache"
+                  md-selected-item="selectedItem"
+                  md-search-text="searchText"
+                  md-selected-item-change="setMed(item)"
+                  md-items="item in searchTextChange(searchText)"
+                  md-item-text="item.name"
+                  md-min-length="3"
+                  placeholder="Search Medicine"
+                  md-theme="default">
+                  <md-item-template>
+                     <span md-highlight-text="searchText" md-highlight-flags="^i">{{item.name}}</span>
+                  </md-item-template>
+                  <md-not-found>
+                    <a class="md-secondary" ng-click="kaabil(searchText)">"{{searchText}}" seems to be a new medicine. Please click here to add this medicine</a>
+                     <!--               <a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>
+                        -->
+                  </md-not-found>
+                </md-autocomplete>
+                <div layout>
+                  <div flex="50">
+                    <h2 class="md-title">Recent Medicine</h2>
+                      <md-chips ng-model="recentmedicine" readonly="true" md-theme="default">
+                          <md-chip-template ga-on="click" ga-event-category="DxMate" ga-event-action="recentMedicine"  ng-click="setrecentmed($chip)" style="cursor: pointer;">
+                              {{$chip.Medicine}}
+                          </md-chip-template>
+                      </md-chips>
+                  </div>
+                  <div flex="50">
+                    <h2 class="md-title">Frequent Medicine</h2>
+                      <md-chips ng-model="frequentmedicine" readonly="true" md-theme="default">
+                          <md-chip-template ga-on="click" ga-event-category="DxMate" ga-event-action="frequentMedicine" ng-click="setfrequentmed($chip)" style="cursor: pointer;">
+                              {{$chip.Medicine}}
+                          </md-chip-template>
+                      </md-chips>
+                  </div>
+                </div>
+             </md-content>
+          </md-tab>
+          <md-tab label="Tests">
+             <md-content class="md-padding">
+                 <md-autocomplete
+                  ng-disabled="isDisabled"
+                  md-no-cache="noCache"
+                  md-selected-item="selectedItemTest"
+                  md-search-text="searchTest"
+                  md-selected-item-change="setTest(item)"
+                  md-items="item in searchTestChange(searchTest)"
+                  md-item-text="item.name"
+                  md-min-length="3"
+                  placeholder="Search Test"
+                  md-theme="default">
+                  <md-item-template>
+                     <span md-highlight-text="searchTest" md-highlight-flags="^i">{{item.name}}</span>
+                  </md-item-template>
+                  <md-not-found>
+                     No states matching "{{searchTest}}" were found.
+                     <!--               <a ng-click="ctrl.newState(ctrl.searchText)">Create a new one!</a>
+                        -->
+                  </md-not-found>
+                </md-autocomplete>
+                <div layout>
+                  <div flex="50">
+                    <h2 class="md-title">Recent Test</h2>
+                    <md-chips ng-model="recenttest" readonly="true" md-theme="default">
+                        <md-chip-template ga-on="click" ga-event-category="DxMate" ga-event-action="recentTest"  ng-click="setrecenttest($chip)" style="cursor: pointer;">
+                            {{$chip.Test}}
+                        </md-chip-template>
+                    </md-chips>
+                  </div>
+                  <div flex="50">
+                    <h2 class="md-title">Frequent Test</h2>
+                    <md-chips ng-model="frequenttest" readonly="true" md-theme="default">
+                        <md-chip-template ga-on="click" ga-event-category="DxMate" ga-event-action="frequentTest"  ng-click="setfrequenttest($chip)" style="cursor: pointer;">
+                            {{$chip.Test}}
+                        </md-chip-template>
+                    </md-chips>
+                  </div>
+                </div>
+             </md-content>
+          </md-tab>
+       </md-tabs>
+    </md-content>
+  </md-card>
+  <md-card ng-if="showTempEpres"  flex class="md-whiteframe-5dp" layout layout-margin md-theme="cardTheme">
+      <md-tabs flex>
+        <md-tab label="Medicines and Tests">
+          <md-content>
+            <md-list>
+               <h2 class="md-title" ng-if="selectedMedicine.length>0">Medicines</h2>
+               <md-list-item class="md-2-line" ng-repeat="item in selectedMedicine | unique: 'id'"  class="noright" ng-click="null" >
+                  <p ng-if="item.id" style="margin-right: 10px; margin-bottom:-12px !important" class="md-icon-float md-block">{{item.name}}</p>
+                  <md-input-container ng-if="!item.id" md-theme="default" style="margin-right: 10px; margin-bottom:-12px !important" class="md-icon-float md-block">
+                      <input required ng-model="item.name" type="text" placeholder="Name">
+                   </md-input-container>
+                  <md-input-container md-theme="default" style="margin-right: 10px; margin-bottom:-12px !important" class="md-icon-float md-block">
+                      <input required ng-model="item.dose" type="text" placeholder="Dosage">
+                   </md-input-container>
+                   <md-input-container class="md-icon-float md-block" style="margin-right: 10px; margin-bottom:-12px !important">
+                      <input required limit-to="2" ng-model="item.days" type="number" placeholder="No. of Days" >
+                   </md-input-container>
+                  <md-input-container style="margin-right: 10px;" md-theme="default">
+                    <md-select required ng-model="item.type" placeholder="Type">
+                      <md-option ng-repeat="type in types" value="{{type}}">{{type}}</md-option>
+                    </md-select>
+                  </md-input-container>
+
+                  <md-input-container style="margin-right: 10px;" md-theme="default">
+                    <md-select required ng-model="item.selectedTimings" placeholder="Timing" multiple>
+                        <md-option ng-value="timing.value" ng-repeat="timing in timings">{{timing.name}}</md-option>
+                    </md-select>
+                  </md-input-container>
+                  <md-input-container class="md-secondary" style="margin-right: 10px;">
+                    <md-switch class ="md-primary" ng-model="item.isafter">{{item.isafter ? "After" : "Before"}} Food      </md-switch>
+                  </md-input-container>
+                  <md-icon class="md-secondary md-hue-3 material-icons"  ng-click="onMedDelete($event,item)" aria-label="Delete Symptoms"> delete </md-icon>
+               </md-list-item>
+
+            </md-list>
+           <h2 class="md-title" ng-if="selectedTest.length>0">Tests</h2>
+            <md-chips ng-model="selectedTest" readonly="true" md-removable="true" md-theme="default">
+                <md-chip-template>
+                    {{$chip.name}}
+                </md-chip-template>
+            </md-chips>
+          </md-content>
+        </md-tab>
+        <md-tab label="Recommendations">
+          <md-input-container class="md-block">
+            <label>Recommendations</label>
+            <textarea ng-model="user.recommendation" md-maxlength="150" rows="5" md-select-on-focus></textarea>
+          </md-input-container>
+        </md-tab>
+      </md-tabs>
+    </md-card>
+  </div>
+   <md-button ga-on="click" ga-event-category="DxMate" ga-event-action="addNotes"  class="md-fab md-whiteframe-15dp fab-absolute md-primary" aria-label="Add Notes" ng-click="$notes(user)">
+        <md-icon md-font-set="material-icons">assignment</md-icon>
+      </md-button>
+</md-content>
+</form>

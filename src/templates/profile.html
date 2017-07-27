@@ -1,0 +1,44 @@
+<div layout-padding>
+ <form name="inviteform">
+    <md-button style="height:0px"></md-button>
+    <div layout layout-padding md-prevent-menu-close="md-prevent-menu-close" layout-align="space-around center">
+      <img  style="height: 64px; width : 64px; border-radius : 50%"ng-src="{{detail.$data.Status.Pic}}" class="md-avatar" alt="{{item.who}}"/>
+      <div>
+        <p>{{detail.$data.Status.FName}} {{detail.$data.Status.LName}}</p>
+      </div>
+      <span flex></span>
+      <div>
+        <md-button style="height:40px" class="md-icon-button" aria-label="open profile" ng-click="gotoprofile()">
+          <md-icon md-font-set="material-icons">edit</md-icon>
+        </md-button>
+      </div>
+      <div style="position: absolute;bottom: 0;left: 0;width: 100%;">
+        <md-progress-linear md-mode="indeterminate" ng-disabled = "!profile || profile.$resolved"></md-progress-linear>
+      </div>
+    </div>
+  <md-divider></md-divider>
+  <md-button  style="height : 0px; padding : 0px; margin : 0px"></md-button>
+  <div layout>
+    <div flex="66">
+      <md-button  class="md-raised" layout-align="center" ng-click="openotppanel()">Change Password</md-button>
+    </div>
+    <div flex="33">
+      <md-button  class="md-raised" layout-align="center" ng-click="logout()">Logout</md-button>
+    </div>
+  </div>
+
+      <div layout="row" style="margin-bottom: -48px">
+        <md-input-container class="md-block" flex="65">
+            <label>Phone Number </label>
+            <input type = "number" required limit-to = "10 " name="phone"  min = "1000000000" max = "9999999999" ng-model= "phone">
+            <div ng-messages="inviteform.phone.$error">
+              <div ng-message="min,max">Please Enter Valid Mobile Number</div>
+            </div>
+        </md-input-container>
+           <div style="padding-top:15px">
+           <md-button ga-on="click" ga-event-category="Invite" ga-event-action="invite"  class="md-raised" layout-align="center" ng-click="invite(phone)" ng-disabled="inviteform.$invalid"> Invite</md-button> 
+           </div>
+      </div>
+  </form>
+
+</div>

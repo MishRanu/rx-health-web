@@ -1,0 +1,49 @@
+<div style="background : url(img/Medicine.png)" layout-fill></div>
+<div style="background : rgba(0,0,0,0.5); position : absolute; top : 0; left : 0" layout-fill layout-gt-xs layout-margin layout-xs="column" layout-align-xs="start center">
+  <div flex-gt-xs = "noshrink" layout style="width:250px">
+    <div flex="nogrow" style="width:20px"></div>
+    <div layout="column" flex-xs>
+      <div flex="nogrow" style="height:20px"></div>
+      <img flex-xs src="img/logo-final.png"><img>
+    </div>
+  </div>
+  <span flex-gt-xs></span>
+  <form id="myForm" name="loginForm" ng-submit="login(user)" flex="noshrink" style="width:360px" layout layout-align-gt-xs="end center">
+  <div flex="noshrink" style="width:355px"layout layout-align="end" layout-padding>
+    <md-card flex="none" flex-xs style="height : 450px ;width : 350px; position:relative; padding-top:40px" class="md-whiteframe-24dp" layout-padding>
+      <md-input-container ng-show="logintype.type > 1" class="md-block">
+        <input type="number" placeholder="Phone Number" min = "1000000000" max = "9999999999" ng-required="logintype.type > 1" md-no-asterisk name="Phone" ng-required="true" ng-model="user.phone" ng-key-up="enter($event)"></input>
+         <div ng-messages="loginForm.Phone.$error">
+              <div ng-message="required">Phone Number is Required</div>
+              <div ng-message="min,max">Please Enter 10 Digit Phone Number</div>
+          </div>
+      </md-input-container>
+      <md-input-container ng-show="logintype.type == 1" class="md-block">
+        <input type="text" placeholder="UserName" ng-required = "logintype.type == 1" md-no-asterisk name="UserName" ng-model="user.username" ng-key-up="enter($event)"></input>
+         <div ng-messages="loginForm.UserName.$error">
+              <div ng-message="required">UserName is Required</div>
+          </div>
+      </md-input-container>
+      <md-input-container class="md-block">
+        <input type="password" placeholder="Password"  required md-no-asterisk name="Password" ng-required="true" ng-model="user.password" ng-key-up="enter($event)"></input>
+        <div ng-messages="loginForm.Password.$error">
+             <div ng-message="required">Please Enter Current Password</div>
+        </div>
+      </md-input-container>
+      <div layout ng-if="logintype.type > 1">
+        <a flex="50" ng-click = "forgotpass()"><u>Forgot Password</u></a>
+        <md-checkbox flex="50" class = "md-primary" ng-model="remember" aria-label="Remember Me? ">Remember Me?</md-checkbox>
+      </div>
+      <md-button ga-on="click" ga-event-category="Login" ga-event-action="login" type = "submit" class="md-primary md-raised">LOGIN</md-button>
+     <!--  <div style="text-align : center"><h5 class="md-primary">OR SignUp</h5></div> -->
+
+      <div ng-if="logintype.type > 1" style="position: relative; padding-top: 10px; text-align : center">
+        <p >Not a member yet  <a ng-disabled = "signupopened" flex="50" ga-on="click" ga-event-category="Login" ga-event-action="newUser" ng-click = "signup()"><u style="cursor:pointer">Sign Up</u></a></p>
+        <!-- <md-button class="md-primary md-raised" flex="33"><md-icon md-svg-src="/img/facebook-box.svg" aria-label="facebook"></md-icon></br>Facebook</md-button>
+        <md-button class="md-warn md-raised" flex="33"><md-icon  md-svg-src="/img/google-plus.svg" aria-label="google plus"></md-icon></br>Google</md-button> -->
+      </div>
+    </md-card>
+  </div>
+  <div hide-xs flex="nogrow" style="width:30px"></div>
+  </form>
+</div>

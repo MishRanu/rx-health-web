@@ -1,0 +1,31 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <div flex style="text-align : center">Templates</div>
+  </div>
+</md-toolbar>
+<md-content ng-style="ctrl.obj">
+  <md-grid-list style="height:100%" md-cols="2" md-row-height="fit" md-gutter="8px">
+    <md-grid-tile>
+      <md-card style="height:200px;width:300px" ng-click="ctrl.mdPanelRef.close()">
+        <md-card-content layout layout-fill layout-align="center center">
+          <div>Blank Template</div>
+        </md-card-content>
+      </md-card>
+    </md-grid-tile>
+    <md-grid-tile ng-repeat="item in ctrl.suggestions | limitTo : 6">
+      <md-card style="height:200px;width:300px" ng-click="ctrl.usesuggestion(item)">
+        <md-card-header>
+          <md-card-header-text>
+            <div class="md-headline">Symptom match:{{item.MatchPercent}}%</div>
+          </md-card-header-text>
+        </md-card-header>
+        <md-card-content>
+          <div ng-repeat="pres in item.Prescription | limitTo : 2" style="padding:4px">
+            <div style="font-size:8px; color:blue; font-weight:bold">{{pres.Medicine}} - {{pres.Dosage}} {{pres.Type}}, {{pres.When}}, {{pres.Days}}days </div>
+            <div style="font-size:8px; color:red">{{pres.Dose}}</div>
+          </div>
+        </md-card-content>
+      </md-card>
+    </md-grid-tile>
+  </md-grid-list>
+</md-content>

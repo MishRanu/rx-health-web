@@ -1,0 +1,104 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <div flex style="text-align : center">New Appointment</div>
+    <md-icon style="cursor:pointer" ng-click="ctrl.mdPanelRef.close()" aria-label="Close"> highlight_off </md-icon>
+  </div>
+</md-toolbar>
+<md-content id="adddoccontent" ng-style="ctrl.obj" style="overflow-x: hidden;">
+  <md-autocomplete style="width:580px;margin:10px"
+     ng-disabled="ctrl.auto.isDisabled"
+     md-no-cache="noCache"
+     md-selected-item="ctrl.auto.selectedItem"
+     md-search-text="ctrl.auto.searchText"
+     md-selected-item-change="ctrl.addsymptom()"
+     md-items="item in ctrl.searchTextChange(ctrl.auto.searchText)"
+     md-item-text="item.name"
+     md-min-length="3"
+     placeholder="Search Symptoms"
+     md-theme="default">
+     <md-item-template>
+        <span md-highlight-text="searchText" md-highlight-flags="^i">{{item.name}}</span>
+     </md-item-template>
+     <md-not-found>
+        No symptoms matching "{{ctrl.auto.searchText}}" were found.
+     </md-not-found>
+  </md-autocomplete>
+  <div id="youbethere" style="color:red;text-align:center">Selected Symptom : {{(ctrl.evidence)?ctrl.evidence.name:'None'}}</div>
+  <form name="conForm" ng-submit="ctrl.confirm($event)" style="width:580px;margin:10px" layout="column" layout-align="center">
+    <md-input-container class="md-block">
+       <label>Patient Name</label>
+       <input required ng-model="ctrl.con.name" type="text" name="name">
+    </md-input-container>
+    <div layout>
+      <md-input-container flex>
+         <label>Phone Number</label>
+         <input required limit-to = "10" required name="phone" ng-model="ctrl.con.phone" type="number" min = "1000000000" max = "9999999999">
+          <div ng-messages="conForm.phone.$error">
+            <div ng-message="min,max">Please Enter 10 Digit Phone Number</div>
+          </div>
+      </md-input-container>
+      <md-input-container flex>
+        <label>Date of Birth</label>
+        <input type="date" ng-model="ctrl.con.dob" required></input>
+      </md-input-container>
+    </div>
+    <md-input-container>
+       <md-radio-group layout name="gender" id="gender" ng-model="ctrl.con.gender" required class="md-primary">
+          <md-radio-button flex="50" name="gender" value="Male"> Male</md-radio-button>
+          <br>
+          <md-radio-button flex="50" name="gender" value="Female"> Female</md-radio-button>
+       </md-radio-group>
+       <div ng-messages="conForm.gender.$error">
+          <div ng-message="required">Gender is required</div>
+       </div>
+    </md-input-container>
+    <div layout>
+      <md-input-container flex>
+        <label>Height (cms)</label>
+         <input name="height" ng-model="ctrl.con.height" type="number">
+      </md-input-container>
+      <md-input-container flex>
+        <label>Weight (Kg)</label>
+         <input name="weight" ng-model="ctrl.con.weight" type="number">
+      </md-input-container>
+      <md-input-container flex>
+        <label>Blood Group</label>
+         <md-select ng-model="ctrl.con.bgroup" name="bloodgroup">
+          <md-option ng-repeat="blood in ['O+','O-','A+','A-','B+','B-','AB+','AB-']" ng-value="blood">
+            {{blood}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+    <div layout>
+      <md-input-container flex>
+        <label>Allergies</label>
+         <input name="allergies" ng-model="ctrl.con.allergies" type="text">
+      </md-input-container>
+      <md-input-container flex>
+        <label>Hereditory Diseases</label>
+         <input name="hereditory" ng-model="ctrl.con.hereditory" type="text">
+      </md-input-container>
+    </div>
+    <div layout>
+      <md-input-container flex>
+        <label>Appointment Date and time </label>
+        <input type="datetime-local" ng-model="ctrl.con.date" name="condate" required>
+      </md-input-container>
+      <md-input-container flex>
+        <label>Doctor</label>
+        <md-select ng-model="ctrl.con.doc" required name="condoc">
+          <md-option ng-repeat="doctor in ctrl.clinicdoctors" ng-value="doctor.DID">
+            {{doctor.Name}}
+          </md-option>
+        </md-select>
+      </md-input-container>
+    </div>
+    <md-checkbox class="md-primary" ng-model="ctrl.paid" aria-label="Paid Checkbox">Have patient paid Fees?</md-checkbox>
+    <md-input-container class = "md-block">
+      <label>How Much?</label>
+      <input type="number" ng-model="ctrl.con.payment" name="condfees" ng-required="ctrl.paid">
+    </md-input-container>
+    <md-button ng-disabled="ctrl.conformsubmitted" type="submit" ga-on="click" ga-event-category="Patientprofile" ga-event-action="confirm appointment" class="md-primary" aria-label="confirm appointment">Confirm Appointment</md-button>
+  </form>
+</md-content>

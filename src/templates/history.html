@@ -1,0 +1,56 @@
+<md-content layout-fill layout layout-xs = "column" style="padding : 8px">
+  <md-card flex-gt-xs = "66" class="md-whiteframe-5dp" layout-margin md-theme="cardTheme" >
+    <md-toolbar>
+      <div class="md-toolbar-tools">
+          <div layout="row">
+              <h1 class="md-title" style="color:white">Case History {{current}}</h1>
+          </div>
+      </div>
+    </md-toolbar>
+    <md-content>
+      <rd-loading loading="!todos.$resolved">
+       <md-list layout-fill>
+            <md-list-item class="md-3-line" ng-repeat="item in todos.Status.SharedSymptoms track by $index" ng-click="openPrescription(item.AID, item.PID)">
+              <img ng-src="{{item.Pic}}" class="md-avatar" alt="{{item.who}}" />
+              <div class="md-list-item-text" layout="column">
+              
+                <h3>{{ item.FName }} {{item.LName}}</h3>
+                <p>{{ item.Symptom }}</p>
+              </div>
+              <!-- <div style="position: absolute;bottom: 0;left: 0;width: 100%;">
+                <md-progress-linear md-mode="indeterminate" ng-disabled = "!prescriptiondetails || prescriptiondetails.$resolved"></md-progress-linear>
+              </div> -->
+              <md-divider></md-divider>
+            </md-list-item>
+            <md-list-item class="md-2-line" ng-show="todos.Status.SharedSymptoms.length == 0" layout-align="center center">
+              <div class="md-list-item-text" layout="column">
+                <h3>No Cases</h3>
+              </div>
+            </md-list-item>
+        </md-list>
+      </rd-loading>
+    </md-content>
+  </md-card>
+  <md-card flex-gt-xs class="md-whiteframe-5dp"layout-margin md-theme="cardTheme">
+      <md-toolbar>
+            <div class="md-toolbar-tools">
+                <div layout="row">
+                    <h1 class="md-title" style="color:white">My Patients</h1>
+                </div>
+            </div>
+        </md-toolbar>
+      <md-content>
+        <rd-loading loading="!mypatients.$resolved">
+        <md-list layout-fill>
+            <md-list-item class="md-1-line" ng-repeat="item in mypatients.Status.ConnectionData.Connection " ng-click="reload(item.UserID)">
+              <img ng-src="{{item.Pic}}" class="md-avatar" alt="{{item.who}}" />
+              <div class="md-list-item-text" layout="column">
+                <h3>{{ item.FullName }}</h3>
+              </div>
+              <md-divider></md-divider>
+            </md-list-item>
+        </md-list>
+      </rd-loading>
+    </md-content>
+  </md-card>
+</md-content>

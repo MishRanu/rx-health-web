@@ -1,0 +1,109 @@
+<md-tabs ng-show="clinics && clinics.length > 0" layout-fill md-selected="currentNavItem">
+    <md-tab  ng-repeat="clinic in clinics track by $index" label="{{clinic.Name}}" md-on-select="refreshdoctors()">
+      <div flex layout style="height:86vh">
+        <md-card flex-gt-xs = "66" class="md-whiteframe-5dp" layout-margin md-theme="cardTheme">
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+                <div layout="row">
+                    <h1 class="md-title" style="color:white">Case History {{current}}</h1>
+                </div>
+            </div>
+          </md-toolbar>
+          <md-content>
+            <rd-loading loading="!todos.$resolved">
+             <md-list layout-fill>
+                  <md-list-item class="md-3-line" ng-repeat="item in todos.Status.SharedSymptoms track by $index" ng-click="openPrescription(item.AID, item.PID)">
+                    <img ng-src="{{item.Pic}}" class="md-avatar" alt="{{item.who}}" />
+                    <div class="md-list-item-text" layout="column">
+                      <h3>{{ item.FName }} {{item.LName}}</h3>
+                      <p>{{ item.Symptom }}</p>
+                    </div>
+                    <md-divider></md-divider>
+                  </md-list-item>
+                  <md-list-item class="md-2-line" ng-show="todos.Status.SharedSymptoms.length == 0" layout-align="center center">
+                    <div class="md-list-item-text" layout="column">
+                      <h3>No Cases</h3>
+                    </div>
+                  </md-list-item>
+              </md-list>
+            </rd-loading>
+          </md-content>
+          <!-- <md-button class="md-fab md-whiteframe-15dp fab-absolute md-primary" aria-label="Add Clinic" ng-click="addclinic()">
+            <md-tooltip md-theme="dark" style="color:cyan" md-direction="top">Add Clinic</md-tooltip>
+            <md-icon md-font-set="material-icons">add</md-icon>
+          </md-button> -->
+        </md-card>
+        <md-card flex-gt-xs class="md-whiteframe-5dp" layout-margin md-theme="cardTheme">
+          <md-toolbar>
+            <div class="md-toolbar-tools">
+                <div layout="row">
+                    <h1 class="md-title" style="color:white">My Doctors</h1>
+                </div>
+                <span flex></span>
+                <md-button class="md-icon-button" aria-label="Refresh Clinic Doctors" ng-click="refreshdoctors()">
+                  <md-icon md-font-set="material-icons">refresh</md-icon>
+                </md-button>
+            </div>
+          </md-toolbar>
+          <md-content>
+            <rd-loading loading="!doctors.$resolved">
+
+                <!-- <md-list-item class="md-2-line" layout-align="center center" ng-click="adddoctor()"> -->
+                  <md-button style="cursor:pointer" layout="column" ng-click="adddoctor()">
+                        <h3><u>Add Doctor</u></h3>
+                  </md-button>
+           <!--      </md-list-item> -->
+                <md-list layout-fill>
+                <md-list-item class="md-1-line" ng-repeat="item in doctors.Status.Doctors track by $index" ng-click="refreshcasehistory(item.DID)">
+                  <img ng-src="{{item.Pic}}" class="md-avatar" alt="{{item.who}}" />
+                  <div class="md-list-item-text" layout="column">
+                    <div><b>{{item.Name}}</b></div>
+                    <div><b style="color: grey">Fees :- </b> {{item.Fees}}</div>
+                  </div>
+                  <md-button aria-label="Edit Fees" class="md-secondary md-primary md-icon-button" ng-click="editfees($event, $index)">
+                    <md-tooltip md-theme="dark" style="color:cyan" md-direction="top">Edit Fees</md-tooltip>
+                    <md-icon md-font-set="material-icons">create</md-icon>
+                  </md-button>
+                  <md-button aria-label="Remove Doctor" class="md-secondary md-warn md-icon-button" ng-click="removedoctor($event, $index)">
+                    <md-icon md-font-set="material-icons">clear</md-icon>
+                  </md-button>
+                  <md-divider></md-divider>
+                </md-list-item>
+                <md-list-item class="md-2-line" ng-show="doctors.Status.Doctors.length == 0" layout-align="center center">
+                  <div class="md-list-item-text" layout="column">
+                    <h3>No Doctors</h3>
+                  </div>
+                </md-list-item>
+              </md-list>
+            </rd-loading>
+          </md-content>
+        </md-card>
+      </div>
+    </md-tab>
+</md-tabs>
+<div ng-if = "clinics && clinics.length == 0" layout-fill layout layout-align="center center"><b style="color: grey">No clinics present. Add clinic from lower right corner</b></div>
+<div ng-if = "!commuid" layout-fill layout layout-align="center center"><b style="color: grey">No communities present. Add community from left side menu</b></div>
+<md-fab-speed-dial ng-if="commuid" md-open="demo.isOpen" md-direction="up"
+                   class="md-scale fab-absolute">
+  <md-fab-trigger>
+    <md-button aria-label="Clinic" class="md-fab md-whiteframe-15dp md-primary">
+      <md-tooltip md-theme="dark" style="color:cyan" md-direction="left">Clinic Menu</md-tooltip>
+      <md-icon md-font-set="material-icons">reorder</md-icon>
+    </md-button>
+  </md-fab-trigger>
+
+  <md-fab-actions>
+    <md-button aria-label="Add Clinic" class="md-fab md-primary md-raised md-mini" ng-click="addclinic()">
+      <md-tooltip md-theme="dark" style="color:cyan" md-direction="left">Add Clinic</md-tooltip>
+      <md-icon md-font-set="material-icons">add</md-icon>
+    </md-button>
+    <md-button aria-label="Edit Clinic" class="md-fab md-primary md-raised md-mini" ng-click="addclinic(clinics[currentNavItem])">
+      <md-tooltip md-theme="dark" style="color:cyan" md-direction="left">Edit Clinic</md-tooltip>
+      <md-icon md-font-set="material-icons">mode_edit</md-icon>
+    </md-button>
+    <md-button aria-label="Delete Clinic" class="md-fab md-primary md-raised md-mini" ng-click="deleteclinic($event)">
+      <md-tooltip md-theme="dark" style="color:cyan" md-direction="left">Delete Clinic</md-tooltip>
+      <md-icon md-font-set="material-icons">clear</md-icon>
+    </md-button>
+  </md-fab-actions>
+</md-fab-speed-dial>

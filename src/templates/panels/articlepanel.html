@@ -1,0 +1,60 @@
+<md-toolbar>
+  <div class="md-toolbar-tools">
+    <div flex style="text-align : center">{{ctrl.title}}</div>
+    <md-icon style="cursor:pointer" ng-click="ctrl.mdPanelRef.close()" aria-label="Close"> highlight_off </md-icon>
+  </div>
+</md-toolbar>
+<md-content ng-style="ctrl.obj" layout-padding layout="column">
+  <form name="articleform" ng-submit="ctrl.publish()">
+    <md-input-container class="md-block">
+      <label>Heading</label>
+      <input  type="text" required md-no-asterisk name="heading" ng-model="ctrl.data.Header">
+      <div ng-messages="articleform.heading.$error">
+        <div ng-message="required">Please Enter Heading</div>
+      </div>
+    </md-input-container>
+    <md-input-container class="md-block">
+      <label>Summary</label>
+      <input  type="text" name="summary" ng-model="ctrl.data.Summary">
+    </md-input-container>
+    <md-divider></md-divider>
+    <textarea  ckeditor="ctrl.options" ng-model = "ctrl.data.Details"></textarea>
+    <div>
+      <h2 class="md-title">Tags</h2>
+      <md-chips ng-model="ctrl.tags" readonly="true" md-theme="default">
+        <md-chip-template ng-click="$chip.selected=!$chip.selected" style="cursor: pointer">
+          <div ng-class="{'font-blue' : $chip.selected}">{{$chip.name}}</div>
+        </md-chip-template>
+      </md-chips>
+    </div>
+    <md-input-container class="md-block">
+      <label>Link</label>
+      <input  type="url" name="link" ng-model="ctrl.data.Link">
+      <div ng-messages="articleform.link.$error">
+        <div ng-message="url">Please Enter Valid Url</div>
+      </div>
+    </md-input-container>
+    <md-input-container class="md-block">
+      <label>Image Link</label>
+      <input  type="url" name="imagelink" ng-model="ctrl.data.ImageLink">
+      <div ng-messages="articleform.imagelink.$error">
+        <div ng-message="url">Please Enter Valid Url</div>
+      </div>
+    </md-input-container>
+    <!-- file upload baki -->
+    <md-input-container class="md-block" ng-if="ctrl.communities">
+      <label>Communities</label>
+      <md-select ng-model="ctrl.data.CommuID" name="community" required>
+        <md-option ng-repeat="commu in ctrl.communities" ng-value="commu.CommuID">
+          {{commu.Name}}
+        </md-option>
+      </md-select>
+      <div ng-messages="articleform.community.$error">
+        <div ng-message="required">This is Required</div>
+      </div>
+    </md-input-container>
+    <md-checkbox class="md-primary" ng-if="ctrl.communities" ng-model="ctrl.public" aria-label="isPublic">Public</md-checkbox>
+    <md-divider></md-divider>
+    <md-button type="submit" ga-on="click" ga-event-category="Community" ga-event-action="post" class="md-raised md-primary" aria-label="Publish Button" ng-disabled="!articleform.$valid">{{ctrl.title}}</md-button>
+  </form>
+</md-content>

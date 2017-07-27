@@ -1,0 +1,49 @@
+<md-toolbar style="max-height:64px;height:64px;">
+  <div class="md-toolbar-tools">
+    <md-button ng-show="!ctrl.comment" class="md-icon-button" aria-label="goback-button" ng-click="ctrl.goback()">
+      <md-icon md-font-set="material-icons">reply</md-icon>
+    </md-button>
+    <div flex style="text-align : center">{{(ctrl.comment)?"Comments":"Replies"}}</div>
+     <md-icon style="cursor:pointer" ng-click="ctrl.mdPanelRef.close()" aria-label="Close"> highlight_off </md-icon>
+  </div>
+</md-toolbar>
+<md-content ng-style="ctrl.obj" layout="column" layout-padding ng-cloak style="margin-top:-64px">
+  <md-tabs flex>
+    <md-tab md-active="ctrl.comment" label="Comment">
+      <md-list class="md-dense">
+        <md-list-item class="md-3-line" ng-repeat = "comment in ctrl.comments track by $index">
+          <img  class="md-avatar" ng-src="{{comment.Pic}}">
+          <div class="md-list-item-text">
+            <h3 style="line-height : 2.00">{{(comment.IsAnon == 1 && comment.UserID != ctrl.IDE)?'Anonymous':comment.FullName}}</h3>
+            <p>{{comment.Comment}}</p>
+           <md-button style ="min-height: 20px; line-height: 20px" class = "md-primary" ng-click="ctrl.openreplies($index)"            aria-label = "Reply">Reply</md-button>
+          <md-button style ="min-height: 20px; line-height: 20px" md-no-ink class="md-primary"
+                      ng-if="comment.UserID == ctrl.IDE" ng-click="ctrl.edit($event, comment)" >Edit</md-button>
+            <md-button style ="min-height: 20px; line-height: 20px" class = "md-primary" ng-if="comment.UserID == ctrl.IDE" aria-label = "Delete Feed" ng-click="ctrl.delete($index)">Delete</md-button>
+          </div>
+          <span flex></span>
+        </md-list-item>
+      </md-list>
+    </md-tab>
+    <md-tab md-active="!ctrl.comment" label="Reply">
+      <md-list class="md-dense">
+        <md-list-item class="md-2-line" ng-repeat = "reply in ctrl.replies track by $index">
+          <img  class="md-avatar" ng-src="{{reply.Pic}}">
+          <div class="md-list-item-text">
+            <h3 style="line-height : 2.00">{{(reply.IsAnon == 1 && reply.UserID != ctrl.IDE)?'Anonymous':reply.FullName}}</h3>
+            <p>{{reply.Reply}}</p>
+          <md-button style ="min-height: 20px; line-height: 20px" md-no-ink class="md-primary" ng-if="reply.UserID == ctrl.IDE" ng-click="ctrl.edit($event, reply)" >Edit</md-button>
+            <md-button style ="min-height: 20px; line-height: 20px" class = "md-primary" ng-if="reply.UserID == ctrl.IDE" aria-label = "Delete Feed" ng-click="ctrl.delete($index)">Delete</md-button>
+          </div>
+          <span flex></span>
+        </md-list-item>
+      </md-list>
+    </md-tab>
+  </md-tabs>
+  <div layout>
+    <!-- <md-checkbox class = "md-priamry" ng-model="ctrl.newanon" aria-label="checkbox-anonymous" ng-true-value="1" ng-false-value="0" style="margin-bottom:0px"></md-checkbox> -->
+    <md-input-container style="margin:0px; height : 40px" class="md-block" flex md-no-float>
+      <input placeholder="Write Here..." type="text" ng-model="ctrl.new" ng-keyup = "ctrl.newcomment($event)">
+    </md-input-container>
+  </div>
+</md-content>
